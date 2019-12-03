@@ -1,0 +1,9 @@
+* Note: Snobol4+ overflows after 7! because of signed short int limitation.
+
+* iterative
+
+        define('ifact(n)') :(ifact_end)
+ifact   ifact = 1
+if1     ifact = gt(n,0) n * ifact :f(return)
+        n = n - 1 :(if1)
+ifact_end
