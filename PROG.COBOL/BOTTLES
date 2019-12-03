@@ -1,69 +1,82 @@
-IDENTIFICATION DIVISION.
-       PROGRAM-ID. 99-Bottles-of-Beer-On-The-Wall.
-       AUTHOR. Joseph James Frantz.
-      *COMMENTS.
-      ******************************************************************
-      * PURPOSE:
-      *   This is a sample COBOL program to display the lyrics of the
-      *   song "99 Bottles of Beer on the Wall."
-      *   This version of the COBOL 99 beers program demonstrates a few
-      *   features of COBOL:
-      *
-      *   1. PERFORM VARYING, Cobol's version of a Loop.
-      *   2. ADD/SUBTRACT with GIVING for math calculations.
-      *   3. EVALUATE/WHEN, Cobol's version of Case.
-      *   4. INSPECT/TALLYING, which finds the number of specified
-      *      characters in a variable.
-      *   5. Reference Modification:
-      *      Var-name(Start character:Number of characters)
-      *      which is essentially Cobol's version of text subscripting.
-      *   6. Long descriptive variable names.
-      *   7. Use of SPACES and ZEROES for field/display values.
-      *   8. Highlight the self documenting nature of COBOL.
-      ******************************************************************
-       DATA DIVISION.
-       WORKING-STORAGE SECTION.
-       01 Keeping-Track-Variables.
-          05 Bottles                      PIC S99   VALUE 0.
-          05 Remaining-Bottles            PIC S99   VALUE 0.
-          05 Counting                     PIC 99    VALUE 0.
-          05 Start-Position               PIC 99    VALUE 0.
-          05 Positions                    PIC 99    VALUE 0.
-       PROCEDURE DIVISION.
-       PASS-AROUND-THOSE-BEERS.
-        PERFORM VARYING Bottles FROM 99 BY -1 UNTIL Bottles = -1
-          DISPLAY SPACES
-          SUBTRACT 1 FROM Bottles GIVING Remaining-Bottles
-          EVALUATE Bottles
+//HERC01C JOB (COBOL),
+//             '99 BOTTLES OF BEER',
+//             CLASS=A,
+//             MSGCLASS=A,
+//             REGION=8M,TIME=1440,
+//             MSGLEVEL=(1,1),
+//*  USER=HERC01,PASSWORD=CUL8TR
+//PRIMES   EXEC COBUCG,
+//         PARM.COB='FLAGW,LOAD,SUPMAP,SIZE=2048K,BUF=1024K'
+//COB.SYSPUNCH DD DUMMY
+//COB.SYSIN    DD *
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. 99-BOTTLES-OF-BEER-ON-THE-WALL.
+        AUTHOR. JOSEPH JAMES FRANTZ.
+       *COMMENTS.
+       ******************************************************************
+       * PURPOSE:
+       *   THIS IS A SAMPLE COBOL PROGRAM TO DISPLAY THE LYRICS OF THE
+       *   SONG "99 BOTTLES OF BEER ON THE WALL."
+       *   THIS VERSION OF THE COBOL 99 BEERS PROGRAM DEMONSTRATES A FEW
+       *   FEATURES OF COBOL:
+       *
+       *   1. PERFORM VARYING, COBOL'S VERSION OF A LOOP.
+       *   2. ADD/SUBTRACT WITH GIVING FOR MATH CALCULATIONS.
+       *   3. EVALUATE/WHEN, COBOL'S VERSION OF CASE.
+       *   4. INSPECT/TALLYING, WHICH FINDS THE NUMBER OF SPECIFIED
+       *      CHARACTERS IN A VARIABLE.
+       *   5. REFERENCE MODIFICATION:
+       *      VAR-NAME(START CHARACTER:NUMBER OF CHARACTERS)
+       *      WHICH IS ESSENTIALLY COBOL'S VERSION OF TEXT SUBSCRIPTING.
+       *   6. LONG DESCRIPTIVE VARIABLE NAMES.
+       *   7. USE OF SPACES AND ZEROES FOR FIELD/DISPLAY VALUES.
+       *   8. HIGHLIGHT THE SELF DOCUMENTING NATURE OF COBOL.
+       ******************************************************************
+       **
+        DATA DIVISION.
+        WORKING-STORAGE SECTION.
+        01 KEEPING-TRACK-VARIABLES.
+            05 BOTTLES                      PIC S99   VALUE 0.
+            05 REMAINING-BOTTLES            PIC S99   VALUE 0.
+            05 COUNTING                     PIC 99    VALUE 0.
+            05 START-POSITION               PIC 99    VALUE 0.
+            05 POSITIONS                    PIC 99    VALUE 0.
+       **
+        PROCEDURE DIVISION.
+            PASS-AROUND-THOSE-BEERS.
+        PERFORM VARYING BOTTLES FROM 99 BY -1 UNTIL BOTTLES = -1
+            DISPLAY SPACES
+            SUBTRACT 1 FROM BOTTLES GIVING REMAINING-BOTTLES
+            EVALUATE Bottles
             WHEN 0
-              DISPLAY "No more bottles of beer on the wall, "
-                      "no more bottles of beer."
-              DISPLAY "Go to the store and buy some more, "
-                      "99 bottles of beer on the wall."
+                DISPLAY "No more bottles of beer on the wall, "
+                    "no more bottles of beer."
+                DISPLAY "Go to the store and buy some more, "
+                    "99 bottles of beer on the wall."
             WHEN 1
-              DISPLAY "1 bottle of beer on the wall, "
-                      "1 bottle of beer."
-              DISPLAY "Take one down and pass it around, "
-                      "no more bottles of beer on the wall."
+                DISPLAY "1 bottle of beer on the wall, "
+                    "1 bottle of beer."
+                DISPLAY "Take one down and pass it around, "
+                    "no more bottles of beer on the wall."
             WHEN 2 Thru 99
-              MOVE ZEROES TO Counting
-              INSPECT Bottles,
-                TALLYING Counting FOR LEADING ZEROES
-              ADD 1 TO Counting GIVING Start-Position
-              SUBTRACT Counting FROM 2 GIVING Positions
-              DISPLAY Bottles(Start-Position:Positions)
-                      " bottles of beer on the wall, "
-                      Bottles(Start-Position:Positions)
-                      " bottles of beer."
-              MOVE ZEROES TO Counting
-              INSPECT Remaining-Bottles TALLYING
+                MOVE ZEROES TO Counting
+                INSPECT Bottles,
+                TALLYING COUNTING FOR LEADING ZEROES
+                ADD 1 TO COUNTING GIVING START-POSITION
+                SUBTRACT COUNTING FROM 2 GIVING POSITIONS
+                DISPLAY BOTTLES(START-POSITION:POSITIONS)
+                          " bottles of beer on the wall, "
+                      BOTTLES(START-POSITION:POSITIONS)
+                          " bottles of beer."
+                MOVE ZEROES TO Counting
+                INSPECT Remaining-Bottles TALLYING
                 Counting FOR LEADING ZEROES
-              ADD 1 TO Counting GIVING Start-Position
-              SUBTRACT Counting FROM 2 GIVING Positions
-              DISPLAY "Take one down and pass it around, "
-                      Remaining-Bottles(Start-Position:Positions)
-                      " bottles of beer on the wall."
-          END-EVALUATE
+                ADD 1 TO Counting GIVING Start-Position
+                SUBTRACT Counting FROM 2 GIVING Positions
+                DISPLAY "Take one down and pass it around, "
+                      REMAINING-BOTTLES(START-POSITION:POSITIONS)
+                          " bottles of beer on the wall."
+            END-EVALUATE
         END-PERFORM
-       STOP RUN.
+        STOP RUN.
 

@@ -1,28 +1,39 @@
-       IDENTIFICATION DIVISION.
-       PROGRAM-ID.  FIZZBUZZ.
-       ENVIRONMENT DIVISION.
-       DATA DIVISION.
-       WORKING-STORAGE SECTION.
-       01  X PIC 999.
-       01  Y PIC 999.
-       01  REM3 PIC 999.
-       01  REM5 PIC 999.
-       PROCEDURE DIVISION.
-      * EVALUATE VERSION 
-           PERFORM VARYING X FROM 1 BY 1 UNTIL X > 100
-               DIVIDE X BY 3 GIVING Y REMAINDER REM3
-               DIVIDE X BY 5 GIVING Y REMAINDER REM5
+//HERC01C JOB (COBOL),
+//             'FIZZBUZZ',
+//             CLASS=A,
+//             MSGCLASS=A,
+//             REGION=8M,TIME=1440,
+//             MSGLEVEL=(1,1),
+//*  USER=HERC01,PASSWORD=CUL8TR
+//PRIMES   EXEC COBUCG,
+//         PARM.COB='FLAGW,LOAD,SUPMAP,SIZE=2048K,BUF=1024K'
+//COB.SYSPUNCH DD DUMMY
+//COB.SYSIN    DD *
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID.  FIZZBUZZ.
+        ENVIRONMENT DIVISION.
+        DATA DIVISION.
+        WORKING-STORAGE SECTION.
+            01  X PIC 999.
+            01  Y PIC 999.
+            01  REM3 PIC 999.
+            01  REM5 PIC 999.
+        PROCEDURE DIVISION.
+       * EVALUATE VERSION 
+        PERFORM VARYING X FROM 1 BY 1 UNTIL X > 100
+            DIVIDE X BY 3 GIVING Y REMAINDER REM3
+            DIVIDE X BY 5 GIVING Y REMAINDER REM5
             EVALUATE REM3 ALSO REM5
-              WHEN ZERO ALSO ZERO
+            WHEN ZERO ALSO ZERO
                 DISPLAY "FizzBuzz"
-              WHEN ZERO ALSO ANY
+            WHEN ZERO ALSO ANY
                 DISPLAY "Fizz"
-              WHEN ANY ALSO ZERO
+            WHEN ANY ALSO ZERO
                 DISPLAY "Buzz"
-              WHEN OTHER
+            WHEN OTHER
                 DISPLAY X
             END-EVALUATE
-           END-PERFORM
-           STOP RUN
-           .
- 
+        END-PERFORM
+        STOP RUN
+        .
+

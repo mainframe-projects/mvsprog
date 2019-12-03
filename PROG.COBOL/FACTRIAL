@@ -1,24 +1,35 @@
-  IDENTIFICATION DIVISION.
-       FUNCTION-ID. factorial.
- 
-      * COBOL HAS An INTRINSIC FUNCTION  
-      * MOVE FUNCTION FACTORIAL(num) TO result
-  
-       DATA DIVISION.
-       LOCAL-STORAGE SECTION.
-       01  i      PIC 9(10).
- 
-       LINKAGE SECTION.
-       01  n      PIC 9(10).
-       01  ret    PIC 9(10).
- 
-       PROCEDURE DIVISION USING BY VALUE n RETURNING ret.
-           MOVE 1 TO ret
- 
-           PERFORM VARYING i FROM 2 BY 1 UNTIL n < i
-               MULTIPLY i BY ret
-           END-PERFORM
- 
-           GOBACK
-           .
+//HERC01C JOB (COBOL),
+//             'FACTORIAL',
+//             CLASS=A,
+//             MSGCLASS=A,
+//             REGION=8M,TIME=1440,
+//             MSGLEVEL=(1,1),
+//  USER=HERC01,PASSWORD=CUL8TR
+//PRIMES   EXEC COBUCG,
+//         PARM.COB='FLAGW,LOAD,SUPMAP,SIZE=2048K,BUF=1024K'
+//COB.SYSPUNCH DD DUMMY
+//COB.SYSIN    DD *
+        IDENTIFICATION DIVISION.
+        FUNCTION-ID. factorial.
+
+       * COBOL HAS An INTRINSIC FUNCTION  
+       * MOVE FUNCTION FACTORIAL(num) TO result
+
+        DATA DIVISION.
+        LOCAL-STORAGE SECTION.
+            01  i      PIC 9(10).
+
+        LINKAGE SECTION.
+            01  n      PIC 9(10).
+            01  ret    PIC 9(10).
+
+        PROCEDURE DIVISION USING BY VALUE n RETURNING ret.
+            MOVE 1 TO ret
+
+            PERFORM VARYING i FROM 2 BY 1 UNTIL n < i
+                MULTIPLY i BY ret
+            END-PERFORM
+
+        GOBACK
+        .
 

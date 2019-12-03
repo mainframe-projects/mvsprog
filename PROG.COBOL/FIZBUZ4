@@ -1,29 +1,40 @@
-identification division.
-program-id. fizzbuzz.
-data division.
-working-storage section.
-01  i pic 999.
-01  fizz pic 999 value 3.
-01  buzz pic 999 value 5.
-procedure division.
-       * CHASE THE FIZZ
-start-fizzbuzz.
-    perform varying i from 1 by 1 until i > 100 
-        evaluate i also i
-        when fizz also buzz
-            display 'fizzbuzz'
-            add 3 to fizz
-            add 5 to buzz
-        when fizz also any
-            display 'fizz'
-            add 3 to fizz
-        when buzz also any
-            display 'buzz'
-            add 5 to buzz
-        when other
-            display i
-        end-evaluate
-    end-perform
-    stop run
-    .
-end program fizzbuzz.
+//HERC01C JOB (COBOL),
+//             'FIZZBUZZ',
+//             CLASS=A,
+//             MSGCLASS=A,
+//             REGION=8M,TIME=1440,
+//             MSGLEVEL=(1,1),
+//*  USER=HERC01,PASSWORD=CUL8TR
+//PRIMES   EXEC COBUCG,
+//         PARM.COB='FLAGW,LOAD,SUPMAP,SIZE=2048K,BUF=1024K'
+//COB.SYSPUNCH DD DUMMY
+//COB.SYSIN    DD *
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. FIZZBUZZ.
+        DATA DIVISION.
+        WORKING-STORAGE SECTION.
+            01  I PIC 999.
+            01  FIZZ PIC 999 VALUE 3.
+            01  BUZZ PIC 999 VALUE 5.
+        PROCEDURE DIVISION.
+        CHASE THE FIZZ
+        START-FIZZBUZZ.
+            PERFORM VARYING I FROM 1 BY 1 UNTIL I > 100 
+                EVALUATE I ALSO I
+                WHEN FIZZ ALSO BUZZ
+                    DISPLAY 'FIZZBUZZ'
+                    ADD 3 TO FIZZ
+                    ADD 5 TO BUZZ
+                WHEN FIZZ ALSO ANY
+                    DISPLAY 'FIZZ'
+                    ADD 3 TO FIZZ
+                WHEN BUZZ ALSO ANY
+                    DISPLAY 'BUZZ'
+                    ADD 5 TO BUZZ
+                WHEN OTHER
+                    DISPLAY I
+                END-EVALUATE
+            END-PERFORM
+            STOP RUN
+            .
+        END PROGRAM FIZZBUZZ.

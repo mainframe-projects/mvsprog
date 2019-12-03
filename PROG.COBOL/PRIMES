@@ -9,6 +9,7 @@
 //         PARM.COB='FLAGW,LOAD,SUPMAP,SIZE=2048K,BUF=1024K'
 //COB.SYSPUNCH DD DUMMY
 //COB.SYSIN    DD *
+      *
    10 * //////////////////////////////////////////////////////////         PRIME
    20 * // Name: Peter M. Maurer                                           PRIME
    30 * // Program: Sieve of Eratosthenes                                  PRIME
@@ -57,7 +58,7 @@
   460      LABEL RECORDS ARE OMITTED                                       PRIME
   470      DATA RECORD IS PRIMES-SYSIN-RECORD.                             PRIME
   480  01  PRIMES-SYSIN-RECORD.                                            PRIME
-  490   02 PRIMES-SYSIN-NUMBER PIC 99999999 OCCURS 10.                     PRIME
+  490  02 PRIMES-SYSIN-NUMBER PIC 99999999 OCCURS 10.                      PRIME
   500 **                                                                   PRIME
   510 **                                                                   PRIME
   520  WORKING-STORAGE SECTION.                                            PRIME
