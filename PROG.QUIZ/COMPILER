@@ -1,0 +1,164 @@
+
+
+                              COMPILERS ON MVS
+                              ================
+
+This mainframe contains the following compilers for use with these programming problems:
+
+
+The original compilers that come with TK4- (Update 8)
+The compilers from Jay Moseley's SYSCPK System Compiler Pack
+
+See http://www.jaymoseley.com/hercules/compilers/list_of.htm for details
+
+
+ALGOL
+"""""
+ALGOLFC	    MVT ALGOL Compile
+ALGOLFCG 	MVT ALGOL Compile, Execute                                          
+ALGOFCL  	MVT ALGOL Compile, Link-Edit                                        
+ALGOFCLG 	MVT ALGOL Compile, Link-Edit, Execute 
+A68C     	ALGOL 68c (Cambridge) Compile, Execute                              
+A68CL    	ALGOL 68c (Cambridge) Compile, Link-Edit                            
+A68CLG   	ALGOL 68c (Cambridge) Compile, Link-Edit, Execute                   
+A68LG    	ALGOL 68c (Cambridge) Link-Edit, Execute                             
+A68XREF  	ALGOL 68c (Cambridge) Print Cross Reference 
+
+
+ASSEMBLER
+"""""""""
+ASM$C    	Assembler XF (patched for macro xref) Compile                        
+ASM$CG   	Assembler XF (patched for macro xref) Compile, Execute              
+ASM$CL   	Assembler XF (patched for macro xref) Compile, Link-Edit            
+ASM$CLG  	Assembler XF (patched for macro xref) Compile, Link-Edit, Execute  
+ASMGC    	Assembler G (Waterloo) Compile                                       
+ASMGCG   	Assembler G (Waterloo) Compile, Execute                             
+ASMGCL   	Assembler G (Waterloo) Compile, Link-Edit                           
+ASMGCLG  	Assembler G (Waterloo) Compile, Link-Edit, Execute                 
+ASMXC    	Assembler XF (IFOX00) Compile                                        
+ASMXCG   	Assembler XF (IFOX00) Compile, Execute                              
+ASMXCL   	Assembler XF (IFOX00) Compile, Link-Edit                            
+ASMXCLG  	Assembler XF (IFOX00) Compile, Link-Edit, Execute                  
+ASSIST   	Execute ASSIST  
+SPASM       Stanford Fast Single Pass Assembler
+
+BASIC
+"""""
+BASIC360 	Ed Liss' BASIC interpreter 
+BWBASIC     Ted Campbell's BASIC Language interpreter
+
+COBOL
+"""""
+COBUC    	MVT COBOL Compile                                                     
+COBUCG   	MVT COBOL Compile, Execute                                           
+COBUCL   	MVT COBOL Compile, Link-Edit                                         
+COBUCLG  	MVT COBOL Compile, Link-Edit, Execute                               
+COBUL    	MVT COBOL Link-Edit, Execute 
+
+
+FORTRAN
+"""""""
+FORTGC      MVT FORTRAN IV (G) Compile                                            
+FORTGCL     MVT FORTRAN IV (G) Compile, Link-Edit                                
+FORTGCLD    MVT FORTRAN IV (G) Compile, Execute                                  
+FORTGCLG    MVT FORTRAN IV (G) Compile, Link-Edit, Execute                      
+FORTGLG     MVT FORTRAN IV (G) Link-Edit, Execute                                
+FORTHC      MVT FORTRAN IV (H) Compile                                            
+FORTHCL     MVT FORTRAN IV (H) Compile, Link-Edit                                
+FORTHCLD    MVT FORTRAN IV (H) Compile, Execute                                  
+FORTHCLG    MVT FORTRAN IV (H) Compile, Link-Edit, Execute                      
+FORTHLG     MVT FORTRAN IV (H) Link-Edit, Execute                                
+MORT        MORTRAN Translate                                                     
+MORTGC      MORTRAN Translate, Compile (FORTRAN IV [G])                          
+MORTGCG     MORTRAN Translate, Compile (FORTRAN IV [G]), Execute                 
+MORTGCL     MORTRAN Translate, Compile (FORTRAN IV [G]), Link-Edit               
+MORTGCLG    MORTRAN Translate, Compile (FORTRAN IV [G]), Link-Edit, Execute      
+MORTHC      MORTRAN Translate, Compile (FORTRAN IV [H])                           
+MORTHCG     MORTRAN Translate, Compile (FORTRAN IV [H]), Execute                 
+MORTHCL     MORTRAN Translate, Compile (FORTRAN IV [H]), Link-Edit               
+MORTHCLG    MORTRAN Translate, Compile (FORTRAN IV [H]), Link-Edit, Execute 
+WATFIV      Waterloo FORTRAN IV Execute                                          
+
+
+PL/1
+""""
+PL1DFC      MVT PL/I (F) Compile (object deck output)                              
+PL1LFC      MVT PL/I (F) Compile (load library output)                             
+PL1LFCG     MVT PL/I (F) Compile, Execute                                         
+PL1LFCL     MVT PL/I (F) Compile, Link-Edit                                       
+PL1LFCLG    MVT PL/I (F) Compile, Link-Edit, Execute                             
+PL1LFG      MVT PL/I (F) Execute (Loader)                                          
+PL1LFLG     MVT PL/I (F) Link-Edit, Execute
+
+
+PL360
+"""""
+PL360C      PL360 Compile
+PL360CG     PL360 Compile, Execute
+PL360CL     PL360 Compile, Link-Edit
+PL360CLG    PL360 Compile, Link-Edit, Execute
+
+
+PASCAL
+""""""
+P8PASC      Pascal 8000 Compile                                                    
+P8PASCAL    Pascal 8000 Compile, Execute                                          
+P8PASCL     Pascal 8000 Compile, Link-Edit                                      
+P8PASCLG    Pascal 8000 Compile, Link-Edit, Execute                            
+P8PASINC    Pascal 8000 include directive for P8PASCL, P8PASCLG 
+SBPASCAL    S.U.N.Y. Stony Brook Pascal Compile, Execute                        
+STPASCAL    Stanford Pascal Compile, Execute                                    
+
+
+REXX
+""""
+REXX        Rexx (Restructured Extended Executor) 
+
+RPG
+"""
+RPGEC       MVT RPG Compile
+RPGECL      MVT RPG Compile, Link-Edit
+RPGECLG     MVT RPG Compile, Link-Edit, Execute
+RPGELG      MVT RPG Link-Edit, Execute
+
+
+SIMULA
+""""""
+SIMC        SIMULA Compile
+SIMCG       SIMULA Compile, Execute
+SIMCL       SIMULA Compile, Link-Edit
+SIMCLG      SIMULA Compile, Link-Edit, Execute
+
+
+SNOBOL4
+"""""""
+SNOBOL4     SNOBOL 4 Compile, Execute
+SPITBOL     SPITBOL (SPeedy ImplemenTation of snoBOL) - SNOBOL 4 compler
+SPITBOL370  Version 3 of SPITBOL - adds new capabilities
+
+
+SORT UTILS
+""""""""""
+SORT        MVT Sort/Merge
+SORTD       MVT Sort/Merge
+
+
+XPLA COMPILER GENERATOR
+"""""""""""""""""""""""
+XPLA        Compiler Generator Syntax Analyzer
+XPLC        Compiler Generator Compile
+XPLCG       Compiler Generator Compile, Execute
+XPLG        Compiler Generator Execute
+
+
+
+
+----------------------------------------------------------------------
+
+
+                              SYSCPK by Jay Moseley
+                              =====================
+
+Many thanks to Jay Moseley who collected most if not all available compliers for MVS 3.8 into the SYSCPK DASD for easy addition to a MVS system.
+
+His original post can be found at http://www.jaymoseley.com/hercules/compilers/syscpk.htm

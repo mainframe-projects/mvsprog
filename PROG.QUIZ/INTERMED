@@ -1,0 +1,24 @@
+INTERMEDIATE PROBLEMS
+"""""""""""""""""""""
+
+
+
+PROBLEMS
+
+1. Write a program that outputs all possibilities to put + or - or nothing between the numbers 1,2,…,9 (in this order) such that the result is 100. For example 1 + 2 + 3 - 4 + 5 + 6 + 78 + 9 = 100.
+2. Write a program that takes the duration of a year (in fractional days) for an imaginary planet as an input and produces a leap-year rule that minimizes the difference to the planet’s solar year.
+3. Write a function that generates a DOT representation of a graph.
+4. Write a program that automatically generates essays for you.
+5. Write a program that automatically converts English text to Morse code and vice versa.
+6. Write a program that finds the longest palindromic substring of a given string. Try to be as efficient as possible!
+7. Implement a binary heap. Once using a list as the base data structure and once by implementing a pointer-linked binary tree. Use it for implementing heap-sort.
+8. Implement an unbalanced binary search tree.
+9 Implement a balanced binary search tree of your choice. I like (a,b)-trees best.
+10. Compare the performance of insertion, deletion and search on your unbalanced search tree with your balanced search tree and a sorted list. Think about good input sequences. If you implemented an (a,b)-tree, think about good values of a and b.
+
+
+
+REFERENCES
+
+https://adriann.github.io/programming_problems.html
+

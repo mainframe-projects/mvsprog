@@ -1,0 +1,17 @@
+CALCULATING PI
+""""""""""""""
+
+
+
+PROBLEM
+
+Create a program to continually calculate and output the next decimal digit of   {\displaystyle \pi }   (pi).
+
+The program should continue forever (until it is aborted by the user) calculating and outputting each decimal digit in succession.
+
+The output should be a decimal sequence beginning   3.14159265 ...
+
+
+REFERENCES
+
+https://www.wikihow.com/Calculate-Pi

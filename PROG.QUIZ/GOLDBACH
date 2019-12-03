@@ -1,0 +1,71 @@
+GOLDBACH'S OTHER CONJECTURE
+"""""""""""""""""""""""""""
+
+
+
+PROBLEM
+
+It was proposed by Christian Goldbach that every odd composite number can be
+written as the sum of a prime and twice a square ( c = p + 2*n^2 ). A composite
+number is a positive integer which is not prime (i.e., which has factors other
+than 1 and itself). 
+
+    9 = 7 + 2×12 
+    15 = 7 + 2×22 
+    21 = 3 + 2×32 
+    25 = 7 + 2×32 
+    27 = 19 + 2×22 
+    33 = 31 + 2×12
+
+It turns out that the conjecture was false.
+
+What is the smallest odd composite that cannot be written as the sum of a prime
+and twice a square?
+
+
+
+ALGORITHM
+
+A sample algorithm in Python:
+
+    from IPython.display import Math, display
+    from collections import defaultdict
+    from itertools import count
+
+    factors = defaultdict(list)
+    witness = {}
+    primes = set()
+    for n in count(2):
+        if factors[n]:
+            # n is composite
+            for m in factors.pop(n):
+                factors[n+m].append(m)
+            if n % 2:
+                # n is odd and composite
+                for k in range(1, int((n/2)**.5)+1):
+                    p = n - 2*k**2
+                    if p in primes:
+                        # TODO: `in` is O(len(primes))
+                        # could optimize by using set
+                        witness[n] = k
+                        break
+                if not n in witness:
+                    break
+        else:
+            factors[n*n].append(n)
+            primes.add(n)
+
+    lines = [r'{0} &= {1} + 2 \cdot {2}^2 \\'.format(n, n - 2*witness[n]**2, witness[n]) for n in sorted(witness)]
+    Math(r"""
+         \begin{{align}}
+         {body}
+         \end{{align}}
+         """.format(body='\n'.join(lines[:100])))
+
+
+
+REFERENCES
+
+https://projecteuler.net/problem=46
+
+

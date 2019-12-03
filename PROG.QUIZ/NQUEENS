@@ -1,0 +1,147 @@
+N QUEENS
+""""""""
+
+
+
+PROBLEM
+
+The N Queen is the problem of placing N chess queens on an N×N chessboard so
+that no two queens attack each other. 
+
+For example, following is a solution for 4 Queen problem.
+
+                        - Q - - 
+                        - - - Q
+                        Q - - - 
+                        - - Q - 
+
+The expected output is a binary matrix which has 1s for the blocks where queens
+are placed. For example, following is the output matrix for above 4 queen
+solution.
+
+
+                      { 0,  1,  0,  0}
+                      { 0,  0,  0,  1}
+                      { 1,  0,  0,  0}
+                      { 0,  0,  1,  0}
+
+
+The eight queens puzzle has 92 distinct solutions. If solutions that differ
+only by the symmetry operations of rotation and reflection of the board are
+counted as one, the puzzle has 12 solutions. These are called fundamental
+solutions; representatives of each are shown below.
+
+Create a generic solution that will print out all solutions for a board of NxN
+with N queens deployed to it.
+
+These brute-force algorithms to count the number of solutions are
+computationally manageable for n = 8, but would be intractable for problems of
+n >= 20, as 20! = 2.433 × 10^18
+
+HISTORY
+
+The eight queens puzzle is the problem of placing eight chess queens on an 8×8
+chessboard so that no two queens threaten each other; thus, a solution requires
+that no two queens share the same row, column, or diagonal. The eight queens
+puzzle is an example of the more general n queens problem of placing n
+non-attacking queens on an n×n chessboard, for which solutions exist for all
+natural numbers n with the exception of n = 2 and n = 3.
+
+Chess composer Max Bezzel published the eight queens puzzle in 1848. Franz
+Nauck published the first solutions in 1850. Nauck also extended the puzzle to
+the n queens problem, with n queens on a chessboard of n×n squares.
+
+Since then, many mathematicians, including Carl Friedrich Gauss, have worked on
+both the eight queens puzzle and its generalized n-queens version. In 1874, S.
+Gunther proposed a method using determinants to find solutions. J.W.L. Glaisher
+refined Gunther's approach.
+
+In 1972, Edsger Dijkstra used this problem to illustrate the power of what he
+called structured programming. He published a highly detailed description of a
+depth-first backtracking algorithm.
+
+
+
+ALGORITHMS
+
+One approach is
+
+If the remainder from dividing n by 6 is not 2 or 3 then the list is simply all
+even numbers followed by all odd numbers not greater than n.  Otherwise, write
+separate lists of even and odd numbers (2, 4, 6, 8 – 1, 3, 5, 7).
+
+If the remainder is 2, swap 1 and 3 in odd list and move 5 to the end (3, 1, 7,
+5).  
+
+If the remainder is 3, move 2 to the end of even list and 1,3 to the end
+of odd list (4, 6, 8, 2 – 5, 7, 1, 3).
+
+Append odd list to the even list and place queens in the rows given by these
+numbers, from left to right (a2, b4, c6, d8, e3, f1, g7, h5).  For n = 8 this
+results in fundamental solution 1 above. A few more examples follow.
+
+14 queens (remainder 2): 
+2, 4, 6, 8, 10, 12, 14, 3, 1, 7, 9, 11, 13, 5.
+
+15 queens (remainder 3): 
+4, 6, 8, 10, 12, 14, 2, 5, 7, 9, 11, 13, 15, 1, 3.
+
+20 queens (remainder 2): 
+2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 3, 1, 7, 9, 11, 13, 15, 17, 19, 5.
+
+
+ALGORITHM - NAIVE
+
+Generate all possible configurations of queens on board and print a
+configuration that satisfies the given constraints.
+
+
+        while there are untried configurations
+        {
+           generate the next configuration
+           if queens don't attack in this configuration then
+           {
+              print this configuration;
+           }
+        }
+
+
+
+
+ALGORITHM - BACKTRACKING
+
+The idea is to place queens one by one in different columns, starting from the
+leftmost column. When we place a queen in a column, we check for clashes with
+already placed queens. In the current column, if we find a row for which there
+is no clash, we mark this row and column as part of the solution. If we do not
+find such a row due to clashes then we backtrack and return false.
+
+
+        1) Start in the leftmost column
+        2) If all queens are placed
+            return true
+        3) Try all rows in the current column. 
+           Do following for every tried row.
+            a) If the queen can be placed safely in this row 
+               then mark this [row, column] as part of the 
+               solution and recursively check if placing
+               queen here leads to a solution.
+            b) If placing the queen in [row, column] leads to
+               a solution then return true.
+            c) If placing queen doesn't lead to a solution then
+               unmark this [row, column] (Backtrack) and go to 
+               step (a) to try other rows.
+        3) If all rows have been tried and nothing worked,
+           return false to trigger backtracking.
+
+
+
+REFERENCES
+
+https://en.wikipedia.org/wiki/Eight_queens_puzzle
+https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/
+https://www.geeksforgeeks.org/n-queen-problem-using-branch-and-bound/
+https://www.geeksforgeeks.org/printing-solutions-n-queen-problem/
+https://www.geeksforgeeks.org/check-if-a-queen-can-attack-a-given-cell-on-chessboard/
+
+

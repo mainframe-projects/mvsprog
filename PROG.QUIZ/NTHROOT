@@ -1,0 +1,31 @@
+NTH ROOT
+""""""""
+
+
+
+PROBLEM
+
+Implement the algorithm to calculate the nth root of a positive real number.
+
+
+ALGORITHM
+
+There is a very fast-converging nth root algorithm for finding the nth 
+root of A: 
+
+1. Make an initial guess x(0)
+
+2. Set x(k+1) = 1/n  *  [ (n -1)  * x(k)  + A / x(k)(n-1)   ]
+   In practice we do delta_x(k) = 1/n * [ A / x(k)^(n-1) - x(k)] 
+                     x(k+1) = x(k) + delta_x(k)
+
+3. Repeat step 2 until desired precision is reached (ie | delta_x(k) | < e
+
+A special case is the familiar square-root algorithm. By setting n = 2, the iteration rule in step 2 becomes the square root iteration rule:
+
+    x(k+1) = 1/2 * [ x(k) + A / x(k) ]
+
+
+REFERENCES 
+
+https://en.wikipedia.org/wiki/Nth_root_algorithm
