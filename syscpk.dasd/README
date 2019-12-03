@@ -1,0 +1,481 @@
+Compiler/Language/Tools Volume Version 1.05 (2013/05/08)
+
+
+
+The rationale for creating a single DASD volume with all of the
+language compilers and related tools includes several factors:
+
+easily install all compilers and related tools in a single step so
+they are all ready to use, even if you might not initially realize
+that an included tool will later be useful to you,
+
+isolate compilers and related tools from the other MVS system
+software,
+
+when upgrades are necessary because new languages/tools have been
+added, it is easier to copy down a new pack than to use a separate
+install process, perhaps for several upgraded compilers or new tools.
+(See Updating to a later version of SYSCPK below.)
+
+In order to be compatible with the largest number of Hercules/MVS
+users and also provide the maximum usable space, the type of DASD
+volume chosen was a 3350.  The volume serial number is SYSCPK -
+SYStem Compiler PacK.  The volume contains its own VSAM User Catalog:
+UCSYSCPK and is installed with an ALIAS in the VSAM Master Catalog
+of SYSC.  All Non-VSAM datasets on the volume begin with the high
+level qualifier SYSC, so that they are automatically accessed via
+the ALIAS/User Catalog relationship.  The volume also contains
+a Procedure Library, in which all the procedures to access the
+compilers/tools are cataloged.
+
+As I created the volume and populated it with the compilers,
+I attempted to include as much documentation as I could on the
+volume itself.  You will find an index dataset - SYSC.$INDEX -
+that contains a one line description of all the other datasets on
+the volume.  I have also included $INDEX members in those datasets
+where it was permissible to do so, and included one line descriptions
+of the contents of the individual members of the datasets.
+
+The dataset SYSC.SETUP.CNTL contains two jobstreams which will assist
+in the incorporation of the volume into your existing MVS system.
+It also contains the jobstreams I used to initially set up the
+volume - initializing the volume, building the User Catalog/ALIAS,
+and allocating the Partitioned Datasets for the Procedure Library
+and Load Library.
+
+All other datasets on the volume were created during the process of
+installing the compilers/tools listed on the prior page of this site.
+There were some modifications made to the target library names in
+order to fit the target environment, but the same basic installation
+jobs were used.  A major difference is that, whenever possible, I
+installed from source code instead of reloading object libraries and
+I have left the source code intact in datasets on the SYSCPK volume.
+
+
+
+Installation / Integration The tasks necessary to install the volume
+into an existing Hercules/MVS system are:
+
+Download the archive containing the volume and unpack it in the
+directory where your other DASD volume images reside;
+
+With Hercules/MVS running, attach the volume to Hercules and vary
+it online to MVS;
+
+Run the job to Import/Connect the User Catalog;
+
+Run the job to modify the JES2 procedure and the SYS1.PARMLIB
+members;
+
+Shutdown MVS/Hercules;
+
+Add the volume to your Hercules' configuration file;
+
+Restart Hercules/MVS.
+
+
+
+1. Download the archive and unpack the volume.  SYSCPK.tar.gz [15.3
+mb MD5: b01fca5b587651b7b1d209d6785dd8fd] contains a single file,
+the 3350 DASD volume image.  Unpack it and place it in the same
+directory with your other DASD volume images.  As provided, the
+volume is not compressed, but you can compress it using the dasdcopy
+utility included with Hercules by using the command:
+
+dasdcopy -z -a syscpk.3350 ofile
+
+where ofile is the name of the file to contain the compressed DASD
+image.  You will probably wish to rename the image file in order
+to be consistent with the naming scheme for DASD volumes in your
+environment, so it would be appropriate to rename the volume image
+at the same time you are compressing it.  If you do not utilize
+compressed DASD on your system, you may simply rename the volume
+image after it has been unpacked so that the name is consistent
+with your other volumes.
+
+A Volume Table of Contents listing of the SYSCPK volume may be seen
+at:  SYSCPK Volume Table of Contents Listing.
+
+2. Attach the volume and place it online to MVS.  Because MVS will
+default to PUBLIC class for volumes auto-mounted at IPL, it is
+preferable to start Hercules and MVS without adding a reference to
+the SYSCPK volume to your Hercules' configuration file at this time.
+
+Let me restate that this is a 3350 DASD image, so you will need to
+determine an appropriate address in your MVS system to which the
+volume may be mounted.
+
+Use the Hercules' attach command to open the volume image to
+Hercules:
+
+
+
+Use the Vary and Mount commands on the MVS console to place the
+volume online:
+
+
+
+The above example is from a system built using my instructions,
+so address 257 is defined as a 3350 device. This may not be true
+on your system!
+
+
+
+3. Run the job to Import/Connect the User Catalog.  As mentioned
+above, there are jobstreams included in the dataset SYSC.SETUP.CNTL
+on the volume that will integrate the volume into your existing
+MVS system.  The first of these to be run is in the member IMPORT.
+This jobstream uses IDCAMS to connect the User Catalog on the SYSCPK
+volume to the VSAM Master Catalog and then defines an ALIAS so
+that the high level qualifier SYSC is related to the User Catalog.
+The contents of that jobstream are:
+
+//IMPORT JOB (SYS),'IMPORT USER
+CAT',CLASS=A,MSGCLASS=A, // MSGLEVEL=(1,1) //* //*
+-----------------------------------------------------------------
+* //* * //* On the DASD volume SYSCPK there is a User Catalog
+defined. All * //* of the datasets contained on that volume are
+catalogued in that * //* User Catalog. This job IMPORTS that
+User Catalog into the MVS * //* Master Catalog, thereby making
+the User Catalog and its contents * //* visable to MVS. An Alias
+is then defined in the Master Catalog * //* that will direct
+all searches for datasets beginning with the * //* High Level
+Qualifier "SYSC" to be directed to the User Catalog on * //* the
+SYSCPK volume. Any new datasets created with a High Level * //*
+Qualifier of "SYSC" will be cataloged in that User Catalog. * //* *
+//* -----------------------------------------------------------------
+* //* //IDCAMS01 EXEC PGM=IDCAMS,REGION=4096K //SYSPRINT DD SYSOUT=*
+//SYSCPK DD UNIT=3350,DISP=OLD,VOL=SER=SYSCPK //SYSIN DD *
+
+  IMPORT CONNECT OBJECTS ( - UCSYSCPK - DEVICETYPE (3350) - VOLUMES
+  (SYSCPK) )
+
+  DEFINE ALIAS ( - NAME (SYSC) - RELATE (UCSYSCPK) )
+
+// Submit the job; the single step should receive a return code
+of 0000.  If your Master Catalog is password protected, you will
+be prompted on the MVS Operator's console for the password twice
+during the execution of this job - once when the User Catalog is
+imported and again when the Alias is created.
+
+
+
+4. Run the job to modify the JES2 procedure and the SYS1.PARMLIB
+members.  The catalogued procedure used to start JES2, which is
+contained in SYS1.PROCLIB,  must be modified in order to search
+the Procedure Library on the SYSCPK volume.  Also, two members of
+SYS1.PARMLIB must be updated - IEAAPF??, which controls from which
+load libraries authorized programs may be executed, and VATLST??,
+which determines the Class under which DASD volumes are automatically
+mounted during IPL.  I have written a program and a jobstream to
+execute the program which reads the existing contents of the members
+to be changed and generates a second jobstream to apply the changes.
+The generated jobstream may be edited before it is submitted, or
+submitted directly to the internal reader.  The source of the program
+is contained in SYSC.SETUP.CNTL(ISYSCPK); it has been compiled and
+the load module is contained in SYSC.LINKLIB, ready to execute.
+The jobstream to execute is contained in SYSC.SETUP.CNTL(ISYSCPKJ):
+
+//ISYSCPK JOB (SYS),'INTEGRATE SYSCPK',CLASS=A,MSGCLASS=X // EXEC
+PGM=ISYSCPK,REGION=1024K //STEPLIB  DD DSN=SYSC.LINKLIB,DISP=SHR
+//SYSOUT   DD SYSOUT=* //SYSUT1   DD DUMMY                  <-
+DYNAMICALLY ALLOCATED //SYSUT2   DD SYSOUT=*               <- USE
+TO CHECK GENERATED JOB //*SYSUT2   DD  SYSOUT=(A,INTRDR)    <-
+USE TO SUBMIT GENERATED JOB // You may submit it as it exists
+to produce a listing of the jobstream that will be generated.
+The SYSOUT DD will contain a progress log:
+
+ISYSCPK: EXECUTION BEGINS ATTEMPTING TO VERIFY DATASETS
+SYS1.PROCLIB(JES2OLD) DOES NOT EXIST SYS1.PROCLIB(JES2)
+EXISTS SYS1.PARMLIB(IEASYS00) EXISTS SCANNING IEASYS00 FOUND
+APF= IN IEASYS00:  APF=00,                      Suffix for
+authorized lib list IEAAPFxx FOUND VAL= IN IEASYS00:  VAL=00,
+Volume Attribute List VATLSTxx SYS1.PARMLIB(IEAAPF99) DOES NOT
+EXIST SYS1.PARMLIB(IEAAPF00) EXISTS SYS1.PARMLIB(VATLST99) DOES NOT
+EXIST SYS1.PARMLIB(VATLST00) EXISTS SCANNING SYS1.PROCLIB(JES2)
+//PROC00 STATEMENT LOCATED IN SYS1.PROCLIB(JES2) SCANNING
+SYS1.PARMLIB(IEAAPF00) SCANNING SYS1.PARMLIB(VATLST00) GENERATING
+JOBSTREAM ISYSCPK: EXECUTION CONCLUDES The actual member names for
+IEAAPF?? and VATLST?? may vary widely among systems; each name
+includes a two character suffix that is either specified in the
+IEASYS00 member of SYS1.PARMLIB or defaults to 00 if not specified.
+The generated jobstream will first copy the existing contents of
+the members to be modified, creating backups:
+
+SYS1.PROCLIB(JES2) is backed up in SYS1.PROCLIB(JES2OLD)
+SYS1.PARMLIB(IEAAPF??) is backed up in SYS1.PARMLIB(IEAAPF99)
+SYS1.PARMLIB(VATLST??) is backed up in SYS1.PARMLIB(VATLST99)
+
+so they may be restored in case of major problems.  If the JES2
+procedure becomes damaged so that JES2 will not start, the previous
+procedure may be used by substituting JES2OLD for JES2 in the
+start command:
+
+S JES2OLD
+
+Here is a version of the generated jobstream executed on one version
+of MVS:
+
+//$SYSCPK JOB (SYS),INTEGRATE.SYSCPK,CLASS=A,MSGCLASS=X
+//IDCAMS  EXEC PGM=IDCAMS,REGION=1024K //SYSPRINT DD
+SYSOUT=* //JES      DD DSN=SYS1.PROCLIB(JES2),DISP=MOD
+//APF      DD DSN=SYS1.PARMLIB(IEAAPF00),DISP=MOD //VAT      DD
+DSN=SYS1.PARMLIB(VATLST00),DISP=MOD //SYSIN    DD *
+
+  REPRO INDATASET (SYS1.PROCLIB(JES2)) -
+        OUTDATASET (SYS1.PROCLIB(JES2OLD))
+
+  DELETE (SYS1.PROCLIB(JES2))
+
+  REPRO INFILE (NEWJES) OUTFILE(JES)
+
+  REPRO INDATASET (SYS1.PARMLIB(IEAAPF00)) -
+        OUTDATASET (SYS1.PARMLIB(IEAAPF99))
+
+  DELETE (SYS1.PARMLIB(IEAAPF00))
+
+  REPRO INFILE (NEWAPF) OUTFILE(APF)
+
+  REPRO INDATASET (SYS1.PARMLIB(VATLST00)) -
+        OUTDATASET (SYS1.PARMLIB(VATLST99))
+
+  DELETE (SYS1.PARMLIB(VATLST00))
+
+  REPRO INFILE (NEWVAT) OUTFILE(VAT)
+
+//NEWJES   DD DATA //JES2    PROC
+M=JES2PARM,                                              00100000 //
+N=SYS1,                                                  00200000 //
+L=LINKLIB,                                               00300000 //
+U=3350,                                                  00400000 //
+N1=SYS1,                                                 00500000 //
+P0=SYS1,                                                 00600000 //
+P1=SYS2,                                                 00700000 //
+P2=SYS1,                                                 00800000 //
+P=JES2PARM                                               00900000
+//IEFPROC EXEC PGM=HASJES20,
+01000000 //             TIME=1440,
+01100000 //             DPRTY=(15,15)
+01200000 //STEPLIB  DD
+UNIT=&U,DISP=SHR,DSN=&N..&L                              01300000
+//PROC00   DD UNIT=3350,VOL=SER=SYSCPK,DISP=SHR,DSN=SYSC.PROCLIB
+01400000 //         DD  DSN=&P0..PROCLIB,DISP=SHR
+01500000 //         DD  DSN=&P1..PROCLIB,DISP=SHR
+01600000 //         DD  DSN=&P2..PROCLIB,DISP=SHR
+01700000 //HASPPARM DD  DSN=&N1..&P(&M),DISP=SHR
+01800000 /* //NEWAPF   DD *
+ SYS1.VTAMLIB MVSRES,
+ 00100000 SYS1.INDMAC MVSRES,
+ 00200000 SYSC.LINKLIB SYSCPK
+ 00300000
+//NEWVAT   DD * CBTCAT,1,2,3350    ,N                  CBT
+Files (#0), contains SYS1.UCA00100000 CBT001,1,2,3350    ,N
+CBT Files (#1)                   00200000 CBT002,1,2,3350    ,N
+CBT Files (#2)                   00300000 CBT003,1,2,3350    ,N
+CBT Files (#3)                   00400000 CBT004,1,2,3350    ,N
+CBT Files (#4)                   00500000 HASP00,1,1,3330    ,N
+MVS 3.8 JES Spool Disk 1         00600000 HASP01,1,1,3330    ,N
+MVS 3.8 JES Spool Disk 2         00700000 LISP80,1,0,3380    ,N
+LISP work pack                   00800000 MVSCAT,1,0,3390    ,N
+MVS Catalog volume               00900000 MVSDLB,1,2,3350    ,N
+MVS DLIB                         01000000 MVSRES,1,2,3350    ,N
+MVS 3.8 SYSRES                   01100000 PAGE00,1,2,3340    ,N
+MVS 3.8 Page Disk 1              01200000 PAGE01,1,2,3340    ,N
+MVS 3.8 Page Disk 2              01300000 PAGE02,1,2,3340    ,N
+MVS 3.8 Page Disk 3              01400000 PUB000,1,0,3350    ,N
+TSO Pack 1, contains SYS1.UCAT.TS01500000 PUB001,1,0,3375    ,N
+TSO Pack 2                       01600000 PUB002,1,0,3380    ,N
+TSO Pack 3                       01700000 PUB003,1,0,3390    ,N
+TSO Pack 4                       01800000 SORT00,0,1,2314    ,N
+Sort Volume 1                    01900000 SORT01,0,1,2314    ,N
+Sort Volume 2                    02000000 SORT02,0,1,2314    ,N
+Sort Volume 3                    02100000 SORT03,0,1,2314    ,N
+Sort Volume 3                    02200000 SORT04,0,1,2314    ,N
+Sort Volume 4                    02300000 SORT05,0,1,2314    ,N
+Sort Volume 5                    02400000 SORT06,0,1,2314
+,N                  Sort Volume 6                    02500000
+SPOOL0,1,1,3330    ,N                  Starter Pack JES Spool Disk
+02600000 SRCCAT,1,2,3350    ,N                  MVS Source code
+02700000 SRC000,1,2,3350    ,N                  MVS Source code
+02800000 SRC001,1,2,3350    ,N                  MVS Source code
+02900000 SRC002,1,2,3350    ,N                  MVS Source code
+03000000 SRC003,1,2,3350    ,N                  MVS Source code
+03100000 START1,1,2,3330    ,N                  Starter Pack sysres
+volume       03200000 SYSCPK,1,2,3350    ,N        PRIVATE -
+SYSTEM LANGUAGE/COMPILER PACK    03300000 WORK00,1,1,3350    ,N
+WORKPACK                         03400000 WORK01,1,1,3375    ,N
+WORKPACK                         03500000 WORK02,1,1,3380    ,N
+WORKPACK                         03600000 WORK03,1,1,3390    ,N
+WORKPACK                         03700000 The statements that were
+inserted in the modified members are shown in color.
+
+Submit the job; the single step of the job should receive a return
+code of 0000.
+
+Note:  The JES2 startup procedure will be modified to place the
+Procedure Library on SYSCPK - SYSC.PROCLIB - as the first library
+in the concatenation for PROC00.  For personal preference, you may
+wish to modify the JES2 procedure to place SYSC.PROCLIB in another
+position in the concatenation.  This is discussed a bit more in
+the section below - Executing the Compilers/Tools.
+
+
+
+5. Shutdown MVS/Hercules.  Shut down MVS and then Hercules.
+
+
+
+6. Add the volume to your Hercules' configuration file.  Edit the
+Hercules' configuration file used when Hercules is executed to
+run MVS (probably mvs.cnf, or turnkey_mvs.conf located in the conf
+subdirectory if you are running a version of the Turnkey system).
+You do not have to add the volume attached to the same address you
+used when you manually attached it above (in step 2), but be sure
+that the address you use has been generated as a 3350 DASD device.
+
+I do not run my system with any DASD volumes set to readonly, but I
+received feedback that if you set SYSCPK as readonly on the Turnkey
+system, you cannot access any members of any Partitioned Dataset
+on SYSCPK.  If you are concerned about accidentally updating the
+SYSCPK volume image, you can use the fakewrite option, which will
+accept write operations to the volume image and report them as
+completed to MVS, but will not actually perform the write to the
+volume image file.
+
+
+
+7. Restart Hercules/MVS.  Restart Hercules and MVS normally.
+All of the compilers/tools on the SYSCPK volume are now usable in
+your system.
+
+
+
+Executing the Compilers/Tools With very few exceptions, all of
+the load modules in SYSC.LINKLIB are executed using catalogued
+procedures, which are located in the Procedure Library on SYSCPK -
+SYSC.PROCLIB.  Each of the procedures contains a STEPLIB DD card so
+that the system will search SYSC.LINKLIB for the load module rather
+than using any of the libraries named in the Linklist.  The necessity
+for a STEPLIB rather than relying on the Linklist is that any library
+to be included in the Linklist must be catalogued in the Master
+Catalog, and part of the design was to have a completely contained
+volume with all of its objects catalogued in its own User Catalog.
+
+Here is the list of procedures contained in SYSC.PROCLIB (from the
+$INDEX member):
+
+ALGOFC   MVT ALGOL Compile ALGOFCG  MVT ALGOL Compile & Execute
+ALGOFCL  MVT ALGOL Compile & Link-Edit ALGOFCLG MVT ALGOL Compile,
+Link-Edit, & Execute ASM$C    Assembler XF (patched for macro xref)
+Compile ASM$CG   Assembler XF (patched for macro xref) Compile &
+Execute ASM$CL   Assembler XF (patched for macro xref) Compile &
+Link-Edit ASM$CLG  Assembler XF (patched for macro xref) Compile,
+Link-Edit, & Execute ASMGC    Assembler G (Waterloo) Compile ASMGCG
+Assembler G (Waterloo) Compile & Execute ASMGCL   Assembler G
+(Waterloo) Compile & Link-Edit ASMGCLG  Assembler G (Waterloo)
+Compile, Link-Edit, & Execute ASMXC    Assembler XF (IFOX00) Compile
+ASMXCG   Assembler XF (IFOX00) Compile & Execute ASMXCL   Assembler
+XF (IFOX00) Compile & Link-Edit ASMXCLG  Assembler XF (IFOX00)
+Compile, Link-Edit, & Execute ASSIST   Execute ASSIST A68C     ALGOL
+68c (Cambridge) Compile & Execute A68CL    ALGOL 68c (Cambridge)
+Compile & Link-Edit A68CLG   ALGOL 68c (Cambridge) Compile,
+Link-Edit, & Execute A68LG    ALGOL 68c (Cambridge) Link-Edit &
+Execute A68XREF  ALGOL 68c (Cambridge) Print Cross Reference BASIC360
+Ed Liss' BASIC interpreter COBUC    MVT COBOL Compile COBUCG   MVT
+COBOL Compile & Execute COBUCL   MVT COBOL Compile & Link-Edit
+COBUCLG  MVT COBOL Compile, Link-Edit, & Execute COBUL    MVT COBOL
+Link-Edit & Execute FORTGC   MVT FORTRAN IV (G) Compile FORTGCL
+MVT FORTRAN IV (G) Compile & Link-Edit FORTGCLD MVT FORTRAN IV (G)
+Compile & Execute FORTGCLG MVT FORTRAN IV (G) Compile, Link-Edit,
+& Execute FORTGLG  MVT FORTRAN IV (G) Link-Edit & Execute FORTHC
+MVT FORTRAN IV (H) Compile FORTHCL  MVT FORTRAN IV (H) Compile &
+Link-Edit FORTHCLD MVT FORTRAN IV (H) Compile & Execute FORTHCLG MVT
+FORTRAN IV (H) Compile, Link-Edit, & Execute FORTHLG  MVT FORTRAN IV
+(H) Link-Edit & Execute MORT     MORTRAN Translate MORTGC   MORTRAN
+Translate & Compile (FORTRAN IV [G]) MORTGCG  MORTRAN Translate,
+Compile (FORTRAN IV [G]), & Execute MORTGCL  MORTRAN Translate,
+Compile (FORTRAN IV [G]), & Link-Edit MORTGCLG MORTRAN Translate,
+Compile (FORTRAN IV [G]), Link-Edit, & Execute MORTHC   MORTRAN
+Translate & Compile (FORTRAN IV [H]) MORTHCG  MORTRAN Translate,
+Compile (FORTRAN IV [H]), & Execute MORTHCL  MORTRAN Translate,
+Compile (FORTRAN IV [H]), & Link-Edit MORTHCLG MORTRAN Translate,
+Compile (FORTRAN IV [H]), Link-Edit, & Execute PL1DFC   MVT PL/I
+(F) Compile (object deck output) PL1LFC   MVT PL/I (F) Compile
+(load library output) PL1LFCG  MVT PL/I (F) Compile & Execute
+PL1LFCL  MVT PL/I (F) Compile & Link-Edit PL1LFCLG MVT PL/I (F)
+Compile, Link-Edit, & Execute PL1LFG   MVT PL/I (F) Execute (Loader)
+PL1LFLG  MVT PL/I (F) Link-Edit & Execute PL360C   PL360 Compile
+PL360CG  PL360 Compile & Execute PL360CL  PL360 Compile & Link-Edit
+PL360CLG PL360 Compile, Link-Edit, & Execute P8PASC   Pascal 8000
+Compile P8PASCAL Pascal 8000 Compile & Execute P8PASCL  Pascal
+8000 Compile & Link-Edit P8PASCLG Pascal 8000 Compile, Link-Edit, &
+Execute P8PASINC Pascal 8000 include directive for P8PASCL & P8PASCLG
+RPGEC    MVT RPG Compile RPGECL   MVT RPG Compile & Link-Edit RPGECLG
+MVT RPG Compile, Link-Edit, & Execute RPGELG   MVT RPG Link-Edit
+& Execute SBPASCAL S.U.N.Y. Stony Brook Pascal Compile & Execute
+SIMC     SIMULA Compile SIMCG    SIMULA Compile & Execute SIMCL
+SIMULA Compile & Link-Edit SIMCLG   SIMULA Compile, Link-Edit, &
+Execute SNOBOL4  SNOBOL 4 Compile & Execute SORT     MVT Sort/Merge
+SORTD    MVT Sort/Merge STPASCAL Stanford Pascal Compile & Execute
+WATFIV   Waterloo FORTRAN IV Execute XPLA     Compiler Generator
+Syntax Analyzer XPLC     Compiler Generator Compile XPLCG    Compiler
+Generator Compile & Execute XPLG     Compiler Generator Execute Some
+of these procedures duplicate similar procedures in SYS1.PROCLIB,
+and perhaps SYS2.PROCLIB also, if you have SYS2.PROCLIB defined in
+your system and have installed some of these compilers.  The version
+in this library will be located first, because the modification of
+the JES2 procedure places the DD statement for this library first
+in the concatenation.  If for any reason you still want to execute a
+similar procedure from the other library(s), you will need to modify
+the JES2 procedure to allow procedure library specification in JCL.
+That is not difficult to do and is described at:  How can I execute
+catalogued procedures from a library other than SYS1.PROCLIB?
+
+
+
+Updating to a later version of SYSCPK Yes, I expect to continue to
+add compilers and related tools to the Language Compilers Available
+for MVS 3.8 page, and I will now be adding them to the SYSCPK image,
+at the same time.  Whenever I make an addition, I will place an entry
+on Changes and update the version number and date in the heading of
+this page.  If you want to update your copy of the SYSCPK volume
+image to the latest version, all you need to do is download the
+archive, extract the image, and (with Hercules/MVS not running,
+of course), use it to replace the previous version of the volume
+image pointed to in your Hercules' configuration file.
+
+I have also added a SYSC.$HISTORY dataset on the volume to track
+updates to the volume's contents.  The entries in this dataset for
+the most recent updates are:
+
+VV.MM __ Date __
+_____________________________________________________ 01.13
+2019/07/29  1, Update Ed Liss' BASIC360 to V3.1.0 Of course, in
+order to prevent this type of update from impacting your system,
+you must not modify or add to the contents of the SYSCPK volume.
+If you do make modifications, you will need to maintain your own
+system to re-apply those modifications following an update of the
+volume image from this site.  It is not an impossible task, but is
+probably one best avoided.
+
+I would especially elicit feedback if you have installed SYSCPK
+on your system and encountered any problems or see areas where
+clarification would be helpful.  This was a major task that has
+taken me several weeks of effort to complete.  It is certainly
+possible that there are minor problems that I have managed to miss,
+in spite of quite a bit of testing.  I would be grateful for the
+notification of any problems or difficulties you encounter.  Also,
+I believe that I have contemplated all possible issues in the design
+of the ISYSCPK program, but I do not have access to more than a
+few configurations of Hercules/MVS to test on and most of them are
+really quite similar.  So if you have a particular configuration
+that causes unexpected behavior of ISYSCPK, please let me know.
+
+I hope that you have found my instructions useful.  If you have
+questions that I can answer to help expand upon the information I
+have included here, please don't hesitate to send them to me:
+
+
+This page was last updated on August 01, 2019.
+
+
