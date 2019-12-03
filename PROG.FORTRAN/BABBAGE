@@ -1,0 +1,15 @@
+c Mister Babbage,
+c I have been working for 2 years in New York on an IBM 704 computer.
+c I have just finished my work on a new language, a language for non-specialists.
+c I called it: FORTRAN (FORmula TRANslator).
+c And with it I solved your problem.
+c Sincerely,
+c John Backus - September 1956
+
+      DO 3 N=1,99736
+      IF(MODF(N*N,1000000)-269696)3,4,3
+ 3    CONTINUE
+ 4    PRINT 5,N
+ 5    FORMAT(I6)
+      STOP
+
