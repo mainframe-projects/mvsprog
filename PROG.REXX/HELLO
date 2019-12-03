@@ -1,0 +1,10 @@
+/*REXX program to show a line of text.  */
+say 'Hello world!'
+
+/* using variable */
+yyy = 'Hello world!'
+say yyy
+
+/* using lineout */
+
+call lineout ,"Hello world!"
