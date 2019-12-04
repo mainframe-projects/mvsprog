@@ -1,33 +1,45 @@
-program BottlesOfBeer (output);
-{this program plays the 99 bottles of beer song}
+//PASC   JOB 'BOTTLES', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        PROGRAM BOTTLESOFBEER (OUTPUT);
+        {THIS PROGRAM PLAYS THE 99 BOTTLES OF BEER SONG}
 
-const
-  BOTTLESSTART = 99;
-  BOTTLESEND = 1;
+        CONST
+          BOTTLESSTART = 99;
+          BOTTLESEND = 1;
 
-type
-  tBottles = BOTTLESEND..BOTTLESSTART;
+        TYPE
+          TBOTTLES = BOTTLESEND..BOTTLESSTART;
 
-var
-  bottles : tBottles;
+        VAR
+          BOTTLES : TBOTTLES;
 
-begin
-  for bottles := BOTTLESSTART downto BOTTLESEND do
-  begin
-    if bottles > 1 then
-    begin
-      writeln (bottles,' bottles of beer on the wall, ',bottles, ' bottles of beer.');
-      write ('Take one down, pass it around, ');
-      writeln (bottles - 1, ' bottles of beer on the wall.');
-      writeln
-    end
-    else
-    begin
-      writeln ('1 bottle of beer on the wall, one bottle of beer.');
-      writeln ('Take one down, pass it around, no more bottles of beer on the wall');
-      writeln;
-      writeln ('No more bottles of beer on the wall, no more bottles of beer.');
-      writeln ('Go to the store and buy some more, 99 bottles of beer on the wall.')    
-    end
-  end
-end.
+        BEGIN
+          FOR BOTTLES := BOTTLESSTART DOWNTO BOTTLESEND DO
+          BEGIN
+            IF BOTTLES > 1 THEN
+            BEGIN
+              WRITELN (BOTTLES,' BOTTLES OF BEER ON THE WALL, ',BOTTLES, ' BOTTLES OF BEER.');
+              WRITE ('TAKE ONE DOWN, PASS IT AROUND, ');
+              WRITELN (BOTTLES - 1, ' BOTTLES OF BEER ON THE WALL.');
+              WRITELN
+            END
+            ELSE
+            BEGIN
+              WRITELN ('1 BOTTLE OF BEER ON THE WALL, ONE BOTTLE OF BEER.');
+              WRITELN ('TAKE ONE DOWN, PASS IT AROUND, NO MORE BOTTLES OF BEER ON THE WALL');
+              WRITELN;
+              WRITELN ('NO MORE BOTTLES OF BEER ON THE WALL, NO MORE BOTTLES OF BEER.');
+              WRITELN ('GO TO THE STORE AND BUY SOME MORE, 99 BOTTLES OF BEER ON THE WALL.')    
+            END
+          END
+        END.

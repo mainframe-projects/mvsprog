@@ -1,9 +1,16 @@
-* Note: Snobol4+ overflows after 7! because of signed short int limitation.
+//SNOBOL   JOB 1,1,MSGCLASS=A,REGION=512K
+//DATA   EXEC  PGM=SNOBOL4                                              00000200
+//STEPLIB  DD  DSN=TMP.SNOBOL4.LINKLIB,DISP=SHR
+//FT06F001 DD  SYSOUT=A                                                 00000400
+//FT07F001 DD  SYSOUT=A                                                 00000500
+//FT05F001 DD  *
+//
+        * NOTE: SNOBOL4+ OVERFLOWS AFTER 7! BECAUSE OF SIGNED SHORT INT LIMITATION.
 
-* recursive
+        * RECURSIVE
 
-        define('rfact(n)') :(rfact_end)
-rfact   rfact = le(n,0) 1 :s(return)
-        rfact = n * rfact(n - 1) :(return)
-rfact_end
+                DEFINE('RFACT(N)') :(RFACT_END)
+        RFACT   RFACT = LE(N,0) 1 :S(RETURN)
+                RFACT = N * RFACT(N - 1) :(RETURN)
+        RFACT_END
 

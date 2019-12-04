@@ -1,102 +1,115 @@
-CLASS BIGNUM;
-BEGIN
- 
-    BOOLEAN PROCEDURE TISZERO(T); TEXT T;
-        TISZERO := T = "0";
- 
-    TEXT PROCEDURE TSHL(T); TEXT T;
-        TSHL :- IF TISZERO(T) THEN T ELSE T & "0";
- 
-    TEXT PROCEDURE TSHR(T); TEXT T;
-        TSHR :- IF T.LENGTH = 1 THEN "0" ELSE T.SUB(1, T.LENGTH - 1);
- 
-    INTEGER PROCEDURE TSIGN(T); TEXT T;
-        TSIGN := IF TISZERO(T) THEN 0
-            ELSE IF T.SUB(1, 1) = "-" THEN -1
-            ELSE 1;
- 
-    TEXT PROCEDURE TABS(T); TEXT T;
-        TABS :- IF TSIGN(T) < 0 THEN T.SUB(2, T.LENGTH - 1) ELSE T;
- 
-    TEXT PROCEDURE TNEGATE(T); TEXT T;
-        TNEGATE :- IF TSIGN(T) <= 0 THEN TABS(T) ELSE ("-" & T);
- 
-    TEXT PROCEDURE TREVERSE(T); TEXT T;
-    BEGIN
-        INTEGER I, J;
-        I := 1; J := T.LENGTH;
-        WHILE I < J DO
-        BEGIN CHARACTER C1, C2;
-            T.SETPOS(I); C1 := T.GETCHAR;
-            T.SETPOS(J); C2 := T.GETCHAR;
-            T.SETPOS(I); T.PUTCHAR(C2);
-            T.SETPOS(J); T.PUTCHAR(C1);
-            I := I + 1;
-            J := J - 1;
-        END;
-        TREVERSE :- T;
-    END TREVERSE;
- 
-    INTEGER PROCEDURE TCMPUNSIGNED(A, B); TEXT A, B;
-    BEGIN
-        INTEGER ALEN, BLEN, RESULT;
-        ALEN := A.LENGTH; BLEN := B.LENGTH;
-        IF ALEN < BLEN THEN
-            RESULT := -1
-        ELSE IF ALEN > BLEN THEN
-            RESULT := 1
-        ELSE BEGIN
-            INTEGER CMP, I; BOOLEAN DONE;
-            A.SETPOS(1);
-            B.SETPOS(1);
-            I := 1;
-            WHILE I <= ALEN AND NOT DONE DO
+//SIMU  JOB 'CALC PI'
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1000K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC SIMCLG,
+//      PARM.SIM='',
+//      PARM.LKED='MAP,LIST,LET',
+//      PARM.GO='LINECNT=64'
+//SIM.SYSIN DD *
+/*
+//GO.SYSOUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        CLASS BIGNUM;
+        BEGIN
+         
+            BOOLEAN PROCEDURE TISZERO(T); TEXT T;
+                TISZERO := T = "0";
+         
+            TEXT PROCEDURE TSHL(T); TEXT T;
+                TSHL :- IF TISZERO(T) THEN T ELSE T & "0";
+         
+            TEXT PROCEDURE TSHR(T); TEXT T;
+                TSHR :- IF T.LENGTH = 1 THEN "0" ELSE T.SUB(1, T.LENGTH - 1);
+         
+            INTEGER PROCEDURE TSIGN(T); TEXT T;
+                TSIGN := IF TISZERO(T) THEN 0
+                    ELSE IF T.SUB(1, 1) = "-" THEN -1
+                    ELSE 1;
+         
+            TEXT PROCEDURE TABS(T); TEXT T;
+                TABS :- IF TSIGN(T) < 0 THEN T.SUB(2, T.LENGTH - 1) ELSE T;
+         
+            TEXT PROCEDURE TNEGATE(T); TEXT T;
+                TNEGATE :- IF TSIGN(T) <= 0 THEN TABS(T) ELSE ("-" & T);
+         
+            TEXT PROCEDURE TREVERSE(T); TEXT T;
             BEGIN
-                I := I + 1;
-                CMP := RANK(A.GETCHAR) - RANK(B.GETCHAR);
-                IF NOT (CMP = 0) THEN
-                    DONE := TRUE;
-            END;
-            RESULT := CMP;
-        END;
-        TCMPUNSIGNED := RESULT;
-    END TCMPUNSIGNED;
- 
-    INTEGER PROCEDURE TCMP(A, B); TEXT A, B;
-    BEGIN
-        BOOLEAN ANEG, BNEG;
-        ANEG := TSIGN(A) < 0; BNEG := TSIGN(B) < 0;
-        IF ANEG AND BNEG THEN
-           TCMP := -TCMPUNSIGNED(TABS(A), TABS(B))
-        ELSE IF NOT ANEG AND BNEG THEN
-           TCMP := 1
-        ELSE IF ANEG AND NOT BNEG THEN
-           TCMP := -1
-        ELSE
-           TCMP := TCMPUNSIGNED(A, B);
-    END TCMP;
- 
-    TEXT PROCEDURE TADDUNSIGNED(A, B); TEXT A, B;
-    BEGIN
-        INTEGER CARRY, I, J;
-        TEXT BF;
-        I := A.LENGTH;
-        J := B.LENGTH;
-        BF :- BLANKS(MAX(I, J) + 1);
-        WHILE I >= 1 OR J >= 1 DO BEGIN
-            INTEGER X, Y, Z;
-            IF I >= 1 THEN BEGIN
-                A.SETPOS(I); I := I - 1; X := RANK(A.GETCHAR) - RANK('0');
-            END;
-            IF J >= 1 THEN BEGIN
-                B.SETPOS(J); J := J - 1; Y := RANK(B.GETCHAR) - RANK('0');
-            END;
-            Z := X + Y + CARRY;
-            IF Z < 10 THEN
-            BEGIN BF.PUTCHAR(CHAR(Z + RANK('0'))); CARRY := 0;
-            END ELSE
-            BEGIN BF.PUTCHAR(CHAR(MOD(Z, 10) + RANK('0'))); CARRY := 1;
-            END;
+                INTEGER I, J;
+                I := 1; J := T.LENGTH;
+                WHILE I < J DO
+                BEGIN CHARACTER C1, C2;
+                    T.SETPOS(I); C1 := T.GETCHAR;
+                    T.SETPOS(J); C2 := T.GETCHAR;
+                    T.SETPOS(I); T.PUTCHAR(C2);
+                    T.SETPOS(J); T.PUTCHAR(C1);
+                    I := I + 1;
+                    J := J - 1;
+                END;
+                TREVERSE :- T;
+            END TREVERSE;
+         
+            INTEGER PROCEDURE TCMPUNSIGNED(A, B); TEXT A, B;
+            BEGIN
+                INTEGER ALEN, BLEN, RESULT;
+                ALEN := A.LENGTH; BLEN := B.LENGTH;
+                IF ALEN < BLEN THEN
+                    RESULT := -1
+                ELSE IF ALEN > BLEN THEN
+                    RESULT := 1
+                ELSE BEGIN
+                    INTEGER CMP, I; BOOLEAN DONE;
+                    A.SETPOS(1);
+                    B.SETPOS(1);
+                    I := 1;
+                    WHILE I <= ALEN AND NOT DONE DO
+                    BEGIN
+                        I := I + 1;
+                        CMP := RANK(A.GETCHAR) - RANK(B.GETCHAR);
+                        IF NOT (CMP = 0) THEN
+                            DONE := TRUE;
+                    END;
+                    RESULT := CMP;
+                END;
+                TCMPUNSIGNED := RESULT;
+            END TCMPUNSIGNED;
+         
+            INTEGER PROCEDURE TCMP(A, B); TEXT A, B;
+            BEGIN
+                BOOLEAN ANEG, BNEG;
+                ANEG := TSIGN(A) < 0; BNEG := TSIGN(B) < 0;
+                IF ANEG AND BNEG THEN
+                   TCMP := -TCMPUNSIGNED(TABS(A), TABS(B))
+                ELSE IF NOT ANEG AND BNEG THEN
+                   TCMP := 1
+                ELSE IF ANEG AND NOT BNEG THEN
+                   TCMP := -1
+                ELSE
+                   TCMP := TCMPUNSIGNED(A, B);
+            END TCMP;
+         
+            TEXT PROCEDURE TADDUNSIGNED(A, B); TEXT A, B;
+            BEGIN
+                INTEGER CARRY, I, J;
+                TEXT BF;
+                I := A.LENGTH;
+                J := B.LENGTH;
+                BF :- BLANKS(MAX(I, J) + 1);
+                WHILE I >= 1 OR J >= 1 DO BEGIN
+                    INTEGER X, Y, Z;
+                    IF I >= 1 THEN BEGIN
+                        A.SETPOS(I); I := I - 1; X := RANK(A.GETCHAR) - RANK('0');
+                    END;
+                    IF J >= 1 THEN BEGIN
+                        B.SETPOS(J); J := J - 1; Y := RANK(B.GETCHAR) - RANK('0');
+                    END;
+                    Z := X + Y + CARRY;
+                    IF Z < 10 THEN
+                    BEGIN BF.PUTCHAR(CHAR(Z + RANK('0'))); CARRY := 0;
+                    END ELSE
+                    BEGIN BF.PUTCHAR(CHAR(MOD(Z, 10) + RANK('0'))); CARRY := 1;
+                    END;
         END;
         IF CARRY > 0 THEN
             BF.PUTCHAR(CHAR(CARRY + RANK('0')));

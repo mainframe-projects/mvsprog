@@ -1,46 +1,55 @@
-/*REXX program to simulate the problem of 100 prisoners:  random,  and optimal strategy.*/
-parse arg men trials seed .                      /*obtain optional arguments from the CL*/
-if    men=='' |    men==","  then    men=    100 /*number of   prisoners   for this run.*/
-if trials=='' | trials==","  then trials= 100000 /*  "     "  simulations   "    "   "  */
-if datatype(seed, 'W')  then call random ,,seed  /*seed for the random number generator.*/
-try= men % 2;                swaps= men * 3      /*number tries for searching for a card*/
-$.1= ' a simple ';           $.2= "an optimal"   /*literals used for the SAY instruction*/
-say center(' running'  commas(trials)   "trials with"  commas(men)  'prisoners ', 70, "═")
-say
-    do strategy=1  for 2;    pardons= 0          /*perform the two types of strategies. */
- 
-      do trials;             call gCards         /*do trials for a strategy;  gen cards.*/
-        do p=1  for men  until failure           /*have each prisoner go through process*/
-        if strategy==1  then failure= simple()   /*Is 1st strategy?  Use simple strategy*/
-                        else failure= picker()   /* " 2nd     "       "  optimal   "    */
-        end   /*p*/                              /*FAILURE ≡ 1?  Then a prisoner failed.*/
-      if #==men  then pardons= pardons + 1       /*was there a pardon of all prisoners? */
-      end     /*trials*/                         /*if 1 prisoner fails, then they all do*/
- 
-    pc= format( pardons/trials*100, , 3);                           _= left('', pc<10)
-    say right('Using', 9)  $.strategy  "strategy yields pardons "   _||pc"%  of the time."
-    end       /*strategy*/
-exit                                             /*stick a fork in it,  we're all done. */
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-commas:  parse arg _;  do c=length(_)-3  to 1  by -3; _= insert(',', _, c); end;  return _
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-gCards: #= 0;                do j=1  for men;  @.j= j             /*define seq. of cards*/
-                             end   /*j*/                          /*same as seq. of men.*/
-               do swaps;             a= random(1, men)            /*get 1st rand number.*/
-                   do until  b\==a;  b= random(1, men)            /* "  2nd   "     "   */
-                   end   /*until*/                                /* [↑] ensure A ¬== B */
-               parse value  @.a @.b  with  @.b @.a                /*swap 2 random cards.*/
-               end       /*swaps*/;  return
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-simple: !.= 0; do try;         do until !.?==0; ?= random(1, men) /*get random card ··· */
-                               end   /*until*/                    /*··· not used before.*/
-               if @.?==p  then do;   #= #+1;  return 0;  end      /*found his own card? */
-               !.?= 1                                             /*flag as being used. */
-               end   /*try*/;        return 1                     /*didn't find his card*/
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-picker: ?= p;  do try; if @.?==p  then do;   #= #+1;    return 0  /*Found his own card? */
-                                       end       /* [↑]  indicate success for prisoner. */
-               ?= @.?                            /*choose next drawer from current card.*/
-               end   /*try*/;        return 1    /*choose half of the number of drawers.*/
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+        /*REXX PROGRAM TO SIMULATE THE PROBLEM OF 100 PRISONERS:  RANDOM,  AND OPTIMAL STRATEGY.*/
+        PARSE ARG MEN TRIALS SEED .                      /*OBTAIN OPTIONAL ARGUMENTS FROM THE CL*/
+        IF    MEN=='' |    MEN==","  THEN    MEN=    100 /*NUMBER OF   PRISONERS   FOR THIS RUN.*/
+        IF TRIALS=='' | TRIALS==","  THEN TRIALS= 100000 /*  "     "  SIMULATIONS   "    "   "  */
+        IF DATATYPE(SEED, 'W')  THEN CALL RANDOM ,,SEED  /*SEED FOR THE RANDOM NUMBER GENERATOR.*/
+        TRY= MEN % 2;                SWAPS= MEN * 3      /*NUMBER TRIES FOR SEARCHING FOR A CARD*/
+        $.1= ' A SIMPLE ';           $.2= "AN OPTIMAL"   /*LITERALS USED FOR THE SAY INSTRUCTION*/
+        SAY CENTER(' RUNNING'  COMMAS(TRIALS)   "TRIALS WITH"  COMMAS(MEN)  'PRISONERS ', 70, "═")
+        SAY
+            DO STRATEGY=1  FOR 2;    PARDONS= 0          /*PERFORM THE TWO TYPES OF STRATEGIES. */
+         
+              DO TRIALS;             CALL GCARDS         /*DO TRIALS FOR A STRATEGY;  GEN CARDS.*/
+                DO P=1  FOR MEN  UNTIL FAILURE           /*HAVE EACH PRISONER GO THROUGH PROCESS*/
+                IF STRATEGY==1  THEN FAILURE= SIMPLE()   /*IS 1ST STRATEGY?  USE SIMPLE STRATEGY*/
+                                ELSE FAILURE= PICKER()   /* " 2ND     "       "  OPTIMAL   "    */
+                END   /*P*/                              /*FAILURE ≡ 1?  THEN A PRISONER FAILED.*/
+              IF #==MEN  THEN PARDONS= PARDONS + 1       /*WAS THERE A PARDON OF ALL PRISONERS? */
+              END     /*TRIALS*/                         /*IF 1 PRISONER FAILS, THEN THEY ALL DO*/
+         
+            PC= FORMAT( PARDONS/TRIALS*100, , 3);                           _= LEFT('', PC<10)
+            SAY RIGHT('USING', 9)  $.STRATEGY  "STRATEGY YIELDS PARDONS "   _||PC"%  OF THE TIME."
+            END       /*STRATEGY*/
+        EXIT                                             /*STICK A FORK IN IT,  WE'RE ALL DONE. */
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        COMMAS:  PARSE ARG _;  DO C=LENGTH(_)-3  TO 1  BY -3; _= INSERT(',', _, C); END;  RETURN _
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        GCARDS: #= 0;                DO J=1  FOR MEN;  @.J= J             /*DEFINE SEQ. OF CARDS*/
+                                     END   /*J*/                          /*SAME AS SEQ. OF MEN.*/
+                       DO SWAPS;             A= RANDOM(1, MEN)            /*GET 1ST RAND NUMBER.*/
+                           DO UNTIL  B\==A;  B= RANDOM(1, MEN)            /* "  2ND   "     "   */
+                           END   /*UNTIL*/                                /* [↑] ENSURE A ¬== B */
+                       PARSE VALUE  @.A @.B  WITH  @.B @.A                /*SWAP 2 RANDOM CARDS.*/
+                       END       /*SWAPS*/;  RETURN
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        SIMPLE: !.= 0; DO TRY;         DO UNTIL !.?==0; ?= RANDOM(1, MEN) /*GET RANDOM CARD ··· */
+                                       END   /*UNTIL*/                    /*··· NOT USED BEFORE.*/
+                       IF @.?==P  THEN DO;   #= #+1;  RETURN 0;  END      /*FOUND HIS OWN CARD? */
+                       !.?= 1                                             /*FLAG AS BEING USED. */
+                       END   /*TRY*/;        RETURN 1                     /*DIDN'T FIND HIS CARD*/
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        PICKER: ?= P;  DO TRY; IF @.?==P  THEN DO;   #= #+1;    RETURN 0  /*FOUND HIS OWN CARD? */
+                                               END       /* [↑]  INDICATE SUCCESS FOR PRISONER. */
+                       ?= @.?                            /*CHOOSE NEXT DRAWER FROM CURRENT CARD.*/
+                       END   /*TRY*/;        RETURN 1    /*CHOOSE HALF OF THE NUMBER OF DRAWERS.*/
 
 

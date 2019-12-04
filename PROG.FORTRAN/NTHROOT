@@ -1,43 +1,61 @@
-program NthRootTest
-  implicit none
- 
-  print *, nthroot(10, 7131.5**10)
-  print *, nthroot(5, 34.0)
- 
-contains
- 
-  function nthroot(n, A, p)
-    real :: nthroot
-    integer, intent(in)        :: n
-    real, intent(in)           :: A
-    real, intent(in), optional :: p
- 
-    real :: rp, x(2)
- 
-    if ( A < 0 ) then
-       stop "A < 0"       ! we handle only real positive numbers
-    elseif ( A == 0 ) then
-       nthroot = 0
-       return
-    end if
- 
-    if ( present(p) ) then
-       rp = p
-    else
-       rp = 0.001
-    end if
- 
-    x(1) = A
-    x(2) = A/n   ! starting "guessed" value...
- 
-    do while ( abs(x(2) - x(1)) > rp )
-       x(1) = x(2)
-       x(2) = ((n-1.0)*x(2) + A/(x(2) ** (n-1.0)))/real(n)
-    end do
- 
-    nthroot = x(2)
- 
-  end function nthroot
- 
-end program NthRootTest
+//FORT     EXEC PGM=IEYFORT,REGION=100K                                 00020000
+//SYSPRINT DD  SYSOUT=A                                                 00040000
+//SYSPUNCH DD  SYSOUT=B                                                 00060000
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(MOD,PASS),UNIT=SYSSQ,             X00080000
+//             SPACE=(80,(200,100),RLSE),DCB=BLKSIZE=80                 00100014
+//LKED EXEC PGM=IEWL,REGION=96K,PARM=(XREF,LET,LIST),COND=(4,LT,FORT)   00120000
+//SYSLIB   DD  DSNAME=SYS1.FORTLIB,DISP=SHR                             00140000
+//SYSLMOD  DD  DSNAME=&GOSET(MAIN),DISP=(NEW,PASS),UNIT=SYSDA,         X00160000
+//             SPACE=(1024,(20,10,1),RLSE),DCB=BLKSIZE=1024             00180014
+//SYSPRINT DD  SYSOUT=A                                                 00200000
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(1024,(100,10),RLSE),DCB=BLKSIZE=1024, X00210018
+//             DSNAME=&SYSUT1                                           00220018
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(OLD,DELETE)                        00240000
+//         DD  DDNAME=SYSIN                                             00260000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((4,LT,FORT),(4,LT,LKED))             00280000
+//FT05F001 DD  DDNAME=SYSIN                                             00300000
+//FT06F001 DD  SYSOUT=A                                                 00320000
+//FT07F001 DD  SYSOUT=B
+        PROGRAM NTHROOTTEST
+        IMPLICIT NONE
+
+        PRINT *, NTHROOT(10, 7131.5**10)
+        PRINT *, NTHROOT(5, 34.0)
+
+        CONTAINS
+
+            FUNCTION NTHROOT(N, A, P)
+                REAL :: NTHROOT
+                INTEGER, INTENT(IN)        :: N
+                REAL, INTENT(IN)           :: A
+                REAL, INTENT(IN), OPTIONAL :: P
+
+                REAL :: RP, X(2)
+
+                IF ( A < 0 ) THEN
+                    STOP "A < 0"       ! WE HANDLE ONLY REAL POSITIVE NUMBERS
+                ELSEIF ( A == 0 ) THEN
+                    NTHROOT = 0
+                    RETURN
+                END IF
+
+                IF ( PRESENT(P) ) THEN
+                    RP = P
+                ELSE
+                    RP = 0.001
+                END IF
+
+                X(1) = A
+                X(2) = A/N   ! STARTING "GUESSED" VALUE...
+
+                DO WHILE ( ABS(X(2) - X(1)) > RP )
+                    X(1) = X(2)
+                    X(2) = ((N-1.0)*X(2) + A/(X(2) ** (N-1.0)))/REAL(N)
+                END DO
+
+                NTHROOT = X(2)
+
+            END FUNCTION NTHROOT
+
+        END PROGRAM NTHROOTTEST
 

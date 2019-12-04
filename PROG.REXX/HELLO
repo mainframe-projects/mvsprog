@@ -1,10 +1,19 @@
-/*REXX program to show a line of text.  */
-say 'Hello world!'
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+        /*REXX PROGRAM TO SHOW A LINE OF TEXT.  */
+        SAY 'HELLO WORLD!'
 
-/* using variable */
-yyy = 'Hello world!'
-say yyy
+        /* USING VARIABLE */
+        YYY = 'HELLO WORLD!'
+        SAY YYY
 
-/* using lineout */
+        /* USING LINEOUT */
 
-call lineout ,"Hello world!"
+        CALL LINEOUT ,"HELLO WORLD!"

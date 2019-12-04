@@ -1,7 +1,16 @@
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
 /*REXX program finds the  lowest (positive)  integer  whose  square  ends in  269,696.  */
-   do j=2  by 2                                  /*start  J  at two,  increment by two. */
-   if ((j * j) // 1000000) == 269696  then leave /*is square mod one million our target?*/
-   end                                           /*◄── signifies the end of the DO loop.*/
-                                                 /* [↑]    //     is division remainder.*/
-say "The smallest integer whose square ends in  269,696  is: "    j
+           DO J=2  BY 2                                  /*START  J  AT TWO,  INCREMENT BY TWO. */
+           IF ((J * J) // 1000000) == 269696  THEN LEAVE /*IS SQUARE MOD ONE MILLION OUR TARGET?*/
+           END                                           /*◄── SIGNIFIES THE END OF THE DO LOOP.*/
+                                                         /* [↑]    //     IS DIVISION REMAINDER.*/
+        SAY "THE SMALLEST INTEGER WHOSE SQUARE ENDS IN  269,696  IS: "    J
 

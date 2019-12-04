@@ -1,7 +1,16 @@
-/*REXX program finds the  lowest (positive)  integer  whose  square  ends in  269,696.  */
-   do j=2  by 2  until right(j * j, 6) == 269696 /*start  J  at two,  increment by two. */
-   end                                           /*◄── signifies the end of the DO loop.*/
-                                                 /* [↑]     *     means multiplication. */
-say "The smallest integer whose square ends in  269,696  is: "    j
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+/*REXX PROGRAM FINDS THE  LOWEST (POSITIVE)  INTEGER  WHOSE  SQUARE  ENDS IN  269,696.  */
+           DO J=2  BY 2  UNTIL RIGHT(J * J, 6) == 269696 /*START  J  AT TWO,  INCREMENT BY TWO. */
+           END                                           /*◄── SIGNIFIES THE END OF THE DO LOOP.*/
+                                                         /* [↑]     *     MEANS MULTIPLICATION. */
+        SAY "THE SMALLEST INTEGER WHOSE SQUARE ENDS IN  269,696  IS: "    J
 
 

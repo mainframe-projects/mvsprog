@@ -1,12 +1,25 @@
-program BabbageProblem;
-(* Anything bracketed off like this is an explanatory comment. *)
-var n : longint; (* The VARiable n can hold a 'long', ie large, INTeger. *)
-begin
-    n := 2; (* Start with n equal to 2. *)
-    repeat
-        n := n + 2 (* Increase n by 2. *)
-    until (n * n) mod 1000000 = 269696;
-(* 'n * n' means 'n times n'; 'mod' means 'modulo'. *)
-    write(n)
-end.
+//PASC   JOB 'BABBAGE', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+//
+        PROGRAM BABBAGEPROBLEM;
+        (* ANYTHING BRACKETED OFF LIKE THIS IS AN EXPLANATORY COMMENT. *)
+        VAR N : LONGINT; (* THE VARIABLE N CAN HOLD A 'LONG', IE LARGE, INTEGER. *)
+        BEGIN
+            N := 2; (* START WITH N EQUAL TO 2. *)
+            REPEAT
+                N := N + 2 (* INCREASE N BY 2. *)
+            UNTIL (N * N) MOD 1000000 = 269696;
+        (* 'N * N' MEANS 'N TIMES N'; 'MOD' MEANS 'MODULO'. *)
+            WRITE(N)
+        END.
 

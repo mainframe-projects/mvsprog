@@ -1,20 +1,30 @@
-tower: proc options (main);
- 
-   call Move (4,1,2,3);
- 
-Move: procedure (ndiscs, from, to, via) recursive;
-   declare (ndiscs, from, to, via) fixed binary;
- 
-   if ndiscs = 1 then
-      put skip edit ('Move disc from pole ', trim(from), ' to pole ',
-         trim(to) ) (a);
-   else
-      do;
-         call Move (ndiscs-1, from, via, to);
-         call Move (1, from, to, via);
-         call Move (ndiscs-1, via, to, from);
-      end;
-end Move;
- 
-end tower;
+//LKED   EXEC  PGM=IEWL,PARM='XREF,LIST',REGION=96K                     09000001
+//SYSLIB   DD  DSNAME=SYS1.PL1LIB,DISP=SHR                              18000001
+//SYSLMOD  DD  DSNAME=&&GOSET(GO),DISP=(MOD,PASS),                     *27000001
+//             UNIT=SYSDA,SPACE=(1024,(50,20,1),RLSE)                   36000001
+//SYSUT1   DD  DSNAME=&&SYSUT1,UNIT=SYSDA,SPACE=(1024,(200,20)),       *45000001
+//             SEP=(SYSLMOD,SYSLIB),DCB=BLKSIZE=1024                    54000019
+//SYSPRINT DD  SYSOUT=A                                                 63000001
+//SYSLIN   DD  DDNAME=SYSIN                                             72000001
+//GO     EXEC  PGM=*.LKED.SYSLMOD,COND=(9,LT,LKED)                      81000001
+//SYSPRINT DD  SYSOUT=A                                                 90000001
+        TOWER: PROC OPTIONS (MAIN);
+         
+           CALL MOVE (4,1,2,3);
+         
+        MOVE: PROCEDURE (NDISCS, FROM, TO, VIA) RECURSIVE;
+           DECLARE (NDISCS, FROM, TO, VIA) FIXED BINARY;
+         
+           IF NDISCS = 1 THEN
+              PUT SKIP EDIT ('MOVE DISC FROM POLE ', TRIM(FROM), ' TO POLE ',
+                 TRIM(TO) ) (A);
+           ELSE
+              DO;
+                 CALL MOVE (NDISCS-1, FROM, VIA, TO);
+                 CALL MOVE (1, FROM, TO, VIA);
+                 CALL MOVE (NDISCS-1, VIA, TO, FROM);
+              END;
+        END MOVE;
+         
+        END TOWER;
 

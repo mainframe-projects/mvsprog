@@ -1,7 +1,16 @@
-/*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/
-                                                 /* [↓]  concise, but somewhat obtuse.  */
-  do j=1  for 100
-  say right(word(word('Fizz', 1+(j//3\==0))word('Buzz', 1+(j//5\==0)) j, 1), 8)
-  end   /*j*/
-                                                 /*stick a fork in it,  we're all done. */
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+        /*REXX PROGRAM DISPLAYS NUMBERS  1 ──► 100  (SOME TRANSFORMED) FOR THE FIZZBUZZ PROBLEM.*/
+                                                         /* [↓]  CONCISE, BUT SOMEWHAT OBTUSE.  */
+          DO J=1  FOR 100
+          SAY RIGHT(WORD(WORD('FIZZ', 1+(J//3\==0))WORD('BUZZ', 1+(J//5\==0)) J, 1), 8)
+          END   /*J*/
+                                                         /*STICK A FORK IN IT,  WE'RE ALL DONE. */
 

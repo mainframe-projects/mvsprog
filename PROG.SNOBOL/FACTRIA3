@@ -1,9 +1,16 @@
-* Note: Snobol4+ overflows after 7! because of signed short int limitation.
+//SNOBOL   JOB 1,1,MSGCLASS=A,REGION=512K
+//DATA   EXEC  PGM=SNOBOL4                                              00000200
+//STEPLIB  DD  DSN=TMP.SNOBOL4.LINKLIB,DISP=SHR
+//FT06F001 DD  SYSOUT=A                                                 00000400
+//FT07F001 DD  SYSOUT=A                                                 00000500
+//FT05F001 DD  *
+//
+        * NOTE: SNOBOL4+ OVERFLOWS AFTER 7! BECAUSE OF SIGNED SHORT INT LIMITATION.
 
-* iterative
+        * ITERATIVE
 
-        define('ifact(n)') :(ifact_end)
-ifact   ifact = 1
-if1     ifact = gt(n,0) n * ifact :f(return)
-        n = n - 1 :(if1)
-ifact_end
+                DEFINE('IFACT(N)') :(IFACT_END)
+        IFACT   IFACT = 1
+        IF1     IFACT = GT(N,0) N * IFACT :F(RETURN)
+                N = N - 1 :(IF1)
+        IFACT_END

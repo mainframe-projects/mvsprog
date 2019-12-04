@@ -1,3 +1,10 @@
-    OUTPUT = "Hello world!"
-END
+//SNOBOL   JOB 1,1,MSGCLASS=A,REGION=512K
+//DATA   EXEC  PGM=SNOBOL4                                              00000200
+//STEPLIB  DD  DSN=TMP.SNOBOL4.LINKLIB,DISP=SHR
+//FT06F001 DD  SYSOUT=A                                                 00000400
+//FT07F001 DD  SYSOUT=A                                                 00000500
+//FT05F001 DD  *
+//
+            OUTPUT = "Hello world!"
+        END
 

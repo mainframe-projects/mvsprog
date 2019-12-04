@@ -1,40 +1,49 @@
-/*REXX program solves the  knight's tour  problem   for a  (general)   NxN   chessboard.*/
-parse arg  N  sRank sFile .                      /*obtain optional arguments from the CL*/
-if     N=='' |     N==","  then     N=8          /*No boardsize specified?  Use default.*/
-if sRank=='' | sRank==","  then sRank=N          /*No starting rank given?   "      "   */
-if sFile=='' | sFile==","  then sFile=1          /* "     "    file   "      "      "   */
-NN=N**2;            NxN='a ' N"x"N ' chessboard' /*file [↓]           [↓]   r=rank      */
-@.=;    do r=1  for N;  do f=1  for N;  @.r.f=.;  end  /*f*/;   end  /*r*/
-beg= '-1-'                                       /*[↑]  create an empty  NxN chessboard.*/
-               Kr =  '2  1 -1 -2  -2 -1  1  2'   /*the legal "rank"  moves for a knight.*/
-               Kf =  '1  2  2  1  -1 -2 -2 -1'   /* "    "   "file"    "    "  "    "   */
-kr.M=words(Kr)                                   /*number of possible moves for a Knight*/
-parse var  Kr  Kr.1 Kr.2 Kr.3 Kr.4 Kr.5 Kr.6 Kr.7 Kr.8   /*parse the legal moves by hand*/
-parse var  Kf  Kf.1 Kf.2 Kf.3 Kf.4 Kf.5 Kf.6 Kf.7 Kf.8   /*  "    "    "     "    "   " */
-@.sRank.sFile= beg                               /*the knight's starting position.      */
-@kt= "knight's tour"                             /*a handy-dandy literal for the  SAYs. */
-if \move(2, sRank, sFile)  &  \(N==1)  then say 'No'   @kt   "solution for"         NxN'.'
-                                       else say 'A solution for the'   @kt   "on"   NxN':'
-!=left('', 9 * (n<18) )                          /*used for indentation of chessboard.  */
-_=substr(copies("┼───",N),2);   say;   say  ! translate('┌'_"┐", '┬', "┼")   /*a square.*/
-                                                 /* [↓]  build a display for chessboard.*/
-     do   r=N  for N  by -1;    if r\==N  then say ! '├'_"┤";        L=@.
-       do f=1  for N; ?=@.r.f;  if ?==NN  then ?='end';  L=L'│'center(?, 3)  /*is "end"?*/
-       end   /*f*/                               /*done with   rank   of the chessboard.*/
-     say ! translate(L'│', , .)                  /*display a     "     "  "       "     */
-     end     /*r*/                               /*19x19 chessboard can be shown 80 cols*/
- 
-say  !  translate('└'_"┘", '┴', "┼")             /*show the last rank of the chessboard.*/
-exit                                             /*stick a fork in it,  we're all done. */
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-move: procedure expose @. Kr. Kf. NN;    parse arg #,rank,file  /*obtain move,rank,file.*/
-         do t=1  for Kr.M;   nr=rank+Kr.t;       nf=file+Kf.t   /*position of the knight*/
-         if @.nr.nf==.  then do;                 @.nr.nf=#      /*Empty? Knight can move*/
-                             if #==NN            then return 1  /*is this the last move?*/
-                             if move(#+1,nr,nf)  then return 1  /* "   "   "    "    "  */
-                             @.nr.nf=.                          /*undo the above move.  */
-                             end                                /*try different move.   */
-         end   /*t*/                                            /* [↑]  all moves tried.*/
-      return 0                                                  /*tour is not possible. */
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+        /*REXX PROGRAM SOLVES THE  KNIGHT'S TOUR  PROBLEM   FOR A  (GENERAL)   NXN   CHESSBOARD.*/
+        PARSE ARG  N  SRANK SFILE .                      /*OBTAIN OPTIONAL ARGUMENTS FROM THE CL*/
+        IF     N=='' |     N==","  THEN     N=8          /*NO BOARDSIZE SPECIFIED?  USE DEFAULT.*/
+        IF SRANK=='' | SRANK==","  THEN SRANK=N          /*NO STARTING RANK GIVEN?   "      "   */
+        IF SFILE=='' | SFILE==","  THEN SFILE=1          /* "     "    FILE   "      "      "   */
+        NN=N**2;            NXN='A ' N"X"N ' CHESSBOARD' /*FILE [↓]           [↓]   R=RANK      */
+        @.=;    DO R=1  FOR N;  DO F=1  FOR N;  @.R.F=.;  END  /*F*/;   END  /*R*/
+        BEG= '-1-'                                       /*[↑]  CREATE AN EMPTY  NXN CHESSBOARD.*/
+                       KR =  '2  1 -1 -2  -2 -1  1  2'   /*THE LEGAL "RANK"  MOVES FOR A KNIGHT.*/
+                       KF =  '1  2  2  1  -1 -2 -2 -1'   /* "    "   "FILE"    "    "  "    "   */
+        KR.M=WORDS(KR)                                   /*NUMBER OF POSSIBLE MOVES FOR A KNIGHT*/
+        PARSE VAR  KR  KR.1 KR.2 KR.3 KR.4 KR.5 KR.6 KR.7 KR.8   /*PARSE THE LEGAL MOVES BY HAND*/
+        PARSE VAR  KF  KF.1 KF.2 KF.3 KF.4 KF.5 KF.6 KF.7 KF.8   /*  "    "    "     "    "   " */
+        @.SRANK.SFILE= BEG                               /*THE KNIGHT'S STARTING POSITION.      */
+        @KT= "KNIGHT'S TOUR"                             /*A HANDY-DANDY LITERAL FOR THE  SAYS. */
+        IF \MOVE(2, SRANK, SFILE)  &  \(N==1)  THEN SAY 'NO'   @KT   "SOLUTION FOR"         NXN'.'
+                                               ELSE SAY 'A SOLUTION FOR THE'   @KT   "ON"   NXN':'
+        !=LEFT('', 9 * (N<18) )                          /*USED FOR INDENTATION OF CHESSBOARD.  */
+        _=SUBSTR(COPIES("┼───",N),2);   SAY;   SAY  ! TRANSLATE('┌'_"┐", '┬', "┼")   /*A SQUARE.*/
+                                                         /* [↓]  BUILD A DISPLAY FOR CHESSBOARD.*/
+             DO   R=N  FOR N  BY -1;    IF R\==N  THEN SAY ! '├'_"┤";        L=@.
+               DO F=1  FOR N; ?=@.R.F;  IF ?==NN  THEN ?='END';  L=L'│'CENTER(?, 3)  /*IS "END"?*/
+               END   /*F*/                               /*DONE WITH   RANK   OF THE CHESSBOARD.*/
+             SAY ! TRANSLATE(L'│', , .)                  /*DISPLAY A     "     "  "       "     */
+             END     /*R*/                               /*19X19 CHESSBOARD CAN BE SHOWN 80 COLS*/
+         
+        SAY  !  TRANSLATE('└'_"┘", '┴', "┼")             /*SHOW THE LAST RANK OF THE CHESSBOARD.*/
+        EXIT                                             /*STICK A FORK IN IT,  WE'RE ALL DONE. */
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        MOVE: PROCEDURE EXPOSE @. KR. KF. NN;    PARSE ARG #,RANK,FILE  /*OBTAIN MOVE,RANK,FILE.*/
+                 DO T=1  FOR KR.M;   NR=RANK+KR.T;       NF=FILE+KF.T   /*POSITION OF THE KNIGHT*/
+                 IF @.NR.NF==.  THEN DO;                 @.NR.NF=#      /*EMPTY? KNIGHT CAN MOVE*/
+                                     IF #==NN            THEN RETURN 1  /*IS THIS THE LAST MOVE?*/
+                                     IF MOVE(#+1,NR,NF)  THEN RETURN 1  /* "   "   "    "    "  */
+                                     @.NR.NF=.                          /*UNDO THE ABOVE MOVE.  */
+                                     END                                /*TRY DIFFERENT MOVE.   */
+                 END   /*T*/                                            /* [↑]  ALL MOVES TRIED.*/
+              RETURN 0                                                  /*TOUR IS NOT POSSIBLE. */
 
 

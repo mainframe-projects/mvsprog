@@ -1,3 +1,21 @@
-100   format (5X,A,"!")
-      print 100,"Hello world!"
+//FORT     EXEC PGM=IEYFORT,REGION=100K                                 00020000
+//SYSPRINT DD  SYSOUT=A                                                 00040000
+//SYSPUNCH DD  SYSOUT=B                                                 00060000
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(MOD,PASS),UNIT=SYSSQ,             X00080000
+//             SPACE=(80,(200,100),RLSE),DCB=BLKSIZE=80                 00100014
+//LKED EXEC PGM=IEWL,REGION=96K,PARM=(XREF,LET,LIST),COND=(4,LT,FORT)   00120000
+//SYSLIB   DD  DSNAME=SYS1.FORTLIB,DISP=SHR                             00140000
+//SYSLMOD  DD  DSNAME=&GOSET(MAIN),DISP=(NEW,PASS),UNIT=SYSDA,         X00160000
+//             SPACE=(1024,(20,10,1),RLSE),DCB=BLKSIZE=1024             00180014
+//SYSPRINT DD  SYSOUT=A                                                 00200000
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(1024,(100,10),RLSE),DCB=BLKSIZE=1024, X00210018
+//             DSNAME=&SYSUT1                                           00220018
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(OLD,DELETE)                        00240000
+//         DD  DDNAME=SYSIN                                             00260000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((4,LT,FORT),(4,LT,LKED))             00280000
+//FT05F001 DD  DDNAME=SYSIN                                             00300000
+//FT06F001 DD  SYSOUT=A                                                 00320000
+//FT07F001 DD  SYSOUT=B
+100   FORMAT (5X,A,"!")
+      PRINT 100,"HELLO WORLD!"
 

@@ -1,14 +1,21 @@
-*       # Note: count is global
- 
-        define('hanoi(n,src,trg,tmp)') :(hanoi_end)
-hanoi   hanoi = eq(n,0) 1 :s(return)
-        hanoi(n - 1, src, tmp, trg)
-        count  = count + 1
-        output = count ': Move disc from ' src ' to ' trg
-        hanoi(n - 1, tmp, trg, src) :(return)
-hanoi_end
- 
-*       # Test with 4 discs
-        hanoi(4,'A','C','B')
-end
+//SNOBOL   JOB 1,1,MSGCLASS=A,REGION=512K
+//DATA   EXEC  PGM=SNOBOL4                                              00000200
+//STEPLIB  DD  DSN=TMP.SNOBOL4.LINKLIB,DISP=SHR
+//FT06F001 DD  SYSOUT=A                                                 00000400
+//FT07F001 DD  SYSOUT=A                                                 00000500
+//FT05F001 DD  *
+//
+        *       # NOTE: COUNT IS GLOBAL
+         
+                DEFINE('HANOI(N,SRC,TRG,TMP)') :(HANOI_END)
+        HANOI   HANOI = EQ(N,0) 1 :S(RETURN)
+                HANOI(N - 1, SRC, TMP, TRG)
+                COUNT  = COUNT + 1
+                OUTPUT = COUNT ': MOVE DISC FROM ' SRC ' TO ' TRG
+                HANOI(N - 1, TMP, TRG, SRC) :(RETURN)
+        HANOI_END
+         
+        *       # TEST WITH 4 DISCS
+                HANOI(4,'A','C','B')
+        END
 

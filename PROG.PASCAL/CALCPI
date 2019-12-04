@@ -1,65 +1,76 @@
-Program Pi_Spigot;
-const
-  n   = 1000;
-  len = 10*n div 3;
- 
-var
-  j, k, q, nines, predigit: integer;
-  a: array[0..len] of longint;
- 
-function OneLoop(i:integer):integer;
-var
-  x: integer;
-begin
-  {Only calculate as far as needed }
-  {+16 for security digits ~5 decimals}
-  i := i*10 div 3+16;
-  IF i > len then
-    i := len;
-  result := 0;
-  repeat   {Work backwards}
-    x  := 10*a[i] + result*i;
-    result := x div (2*i - 1);
-    a[i]   := x - result*(2*i - 1);//x mod (2*i - 1)
-    dec(i);
-  until i<= 0 ;
-end;
- 
-begin
- 
-  for j := 1 to len do
-    a[j] := 2;                 {Start with 2s}
-  nines := 0;
-  predigit := 0;               {First predigit is a 0}
- 
-  for j := 1 to n do
-  begin
-    q := OneLoop(n-j);
-    a[1] := q mod 10;
-    q := q div 10;
-    if q = 9 then
-      nines := nines + 1
-    else
-      if q = 10 then
-      begin
-        write(predigit+1);
-        for k := 1 to nines do
-          write(0);            {zeros}
-        predigit := 0;
-        nines := 0
-      end
-      else
-      begin
-        write(predigit);
-        predigit := q;
-        if nines <> 0 then
-        begin
-          for k := 1 to nines do
-            write(9);
-          nines := 0
-        end
-      end
-  end;
-  writeln(predigit);
-end.
+//PASC   JOB 'CALC PI - SPIGOT', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+        PROGRAM PI_SPIGOT;
+        CONST
+          N   = 1000;
+          LEN = 10*N DIV 3;
+         
+        VAR
+          J, K, Q, NINES, PREDIGIT: INTEGER;
+          A: ARRAY[0..LEN] OF LONGINT;
+         
+        FUNCTION ONELOOP(I:INTEGER):INTEGER;
+        VAR
+          X: INTEGER;
+        BEGIN
+          {ONLY CALCULATE AS FAR AS NEEDED }
+          {+16 FOR SECURITY DIGITS ~5 DECIMALS}
+          I := I*10 DIV 3+16;
+          IF I > LEN THEN
+            I := LEN;
+          RESULT := 0;
+          REPEAT   {WORK BACKWARDS}
+            X  := 10*A[I] + RESULT*I;
+            RESULT := X DIV (2*I - 1);
+            A[I]   := X - RESULT*(2*I - 1);//X MOD (2*I - 1)
+            DEC(I);
+          UNTIL I<= 0 ;
+        END;
+         
+        BEGIN
+         
+          FOR J := 1 TO LEN DO
+            A[J] := 2;                 {START WITH 2S}
+          NINES := 0;
+          PREDIGIT := 0;               {FIRST PREDIGIT IS A 0}
+         
+          FOR J := 1 TO N DO
+          BEGIN
+            Q := ONELOOP(N-J);
+            A[1] := Q MOD 10;
+            Q := Q DIV 10;
+            IF Q = 9 THEN
+              NINES := NINES + 1
+            ELSE
+              IF Q = 10 THEN
+              BEGIN
+                WRITE(PREDIGIT+1);
+                FOR K := 1 TO NINES DO
+                  WRITE(0);            {ZEROS}
+                PREDIGIT := 0;
+                NINES := 0
+              END
+              ELSE
+              BEGIN
+                WRITE(PREDIGIT);
+                PREDIGIT := Q;
+                IF NINES <> 0 THEN
+                BEGIN
+                  FOR K := 1 TO NINES DO
+                    WRITE(9);
+                  NINES := 0
+                END
+              END
+          END;
+          WRITELN(PREDIGIT);
+        END.
 

@@ -1,9 +1,18 @@
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
 /*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/
-                                                 /*╔═══════════════════════════════════╗*/
-  do j=1  to 100;      z=  j                     /*║                                   ║*/
-  if j//3    ==0  then z= 'Fizz'                 /*║  The divisors  (//)  of the  IFs  ║*/
-  if j//5    ==0  then z= 'Buzz'                 /*║  must be in ascending order.      ║*/
-  if j//(3*5)==0  then z= 'FizzBuzz'             /*║                                   ║*/
-  say right(z, 8)                                /*╚═══════════════════════════════════╝*/
-  end   /*j*/                                    /*stick a fork in it,  we're all done. */
+                                                         /*╔═══════════════════════════════════╗*/
+          DO J=1  TO 100;      Z=  J                     /*║                                   ║*/
+          IF J//3    ==0  THEN Z= 'FIZZ'                 /*║  THE DIVISORS  (//)  OF THE  IFS  ║*/
+          IF J//5    ==0  THEN Z= 'BUZZ'                 /*║  MUST BE IN ASCENDING ORDER.      ║*/
+          IF J//(3*5)==0  THEN Z= 'FIZZBUZZ'             /*║                                   ║*/
+          SAY RIGHT(Z, 8)                                /*╚═══════════════════════════════════╝*/
+          END   /*J*/                                    /*STICK A FORK IN IT,  WE'RE ALL DONE. */
 

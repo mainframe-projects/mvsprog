@@ -1,10 +1,22 @@
-function factorial(n: integer): integer;
- var
-  i, result: integer;
- begin
-  result := 1;
-  for i := 2 to n do
-   result := result * i;
-  factorial := result
- end;
+//PASC   JOB 'FACTORIAL', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        FUNCTION FACTORIAL(N: INTEGER): INTEGER;
+         VAR
+          I, RESULT: INTEGER;
+         BEGIN
+          RESULT := 1;
+          FOR I := 2 TO N DO
+           RESULT := RESULT * I;
+          FACTORIAL := RESULT
+         END;
 

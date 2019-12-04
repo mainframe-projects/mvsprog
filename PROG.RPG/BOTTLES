@@ -1,3 +1,26 @@
+ //DEFAULT PROC RGREGN=52K,RGPARM='NODECK,LOAD,LIST,NOSEQN',            104000016
+//             RGU3SPC='(600,(100,20))',RGU2SPC='(600,(100,20))',      208000016
+//             RGU1SPC='(600,(100,20))',RGGOSPC='(80,(200,50))',       312000016
+//             LKREGN=100K,LKPARM='XREF,LIST,LET',                     416000016
+//             LKMDSPC='(1024,(50,20,1))',LKU1SPC='(1024,(50,20))',    520000016
+//             GOCOND='((9,LT,RPG),(5,LT,LKED))',GOPARM='DATE=000000'   24000017
+//RPG     EXEC PGM=IESRPG,REGION=&RGREGN,PARM=(&RGPARM)                 28000016
+//SYSPRINT DD  SYSOUT=A                                                 32000016
+//SYSPUNCH DD  SYSOUT=B                                                 36000016
+//SYSUT3   DD  DSNAME=&&SYSUT3,UNIT=SYSSQ,SPACE=&RGU3SPC                40000000
+//SYSUT2   DD  DSNAME=&&SYSUT2,UNIT=SYSSQ,SPACE=&RGU2SPC                44000000
+//SYSUT1   DD  DSNAME=&&SYSUT1,UNIT=SYSSQ,SPACE=&RGU1SPC                48000000
+//SYSGO   DD  DSNAME=&&LOADSET,UNIT=(SYSSQ,SEP=SYSPUNCH),              152000000
+//             DISP=(MOD,PASS,DELETE),SPACE=&RGGOSPC                    56000016
+//LKED    EXEC PGM=IEWL,REGION=&LKREGN,PARM=(&LKPARM)                   60000016
+//SYSLIN   DD  DSNAME=&&LOADSET,DISP=(OLD,DELETE)                       64000000
+//         DD  DDNAME=SYSIN                                             68000016
+//SYSLMOD  DD  DSNAME=&&GOSET(RPG),UNIT=SYSDA,DISP=(NEW,PASS,DELETE),  172000016
+//             SPACE=&LKMDSPC                                           76000016
+//SYSUT1   DD  DSNAME=&&SYSUT1,SPACE=&LKU1SPC,                         180000000
+//             UNIT=(SYSDA,SEP=(SYSLIN,SYSLMOD))                        84000016
+//SYSPRINT DD  SYSOUT=A                                                 88000016
+//GO      EXEC PGM=*.LKED.SYSLMOD,COND=&GOCOND,PARM='&GOPARM'           93000017
  H                                                                    BOTTLE
      F*
      F* RPG II VERSION OF THE BOTTLES PROGRAM 

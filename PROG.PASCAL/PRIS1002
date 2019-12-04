@@ -1,140 +1,151 @@
-program Prisoners100;
-{$IFDEF FPC}
-  {$MODE DELPHI}{$OPTIMIZATION ON,ALL}
-{$ELSE}
-  {$APPTYPE CONSOLE}
-{$ENDIF}
-type
-  tValue  = NativeUint;
-  tpValue = pNativeUint;
-  tPrisNum = array of tValue;
+//PASC   JOB '100 PRISONER PROBLEM', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+        PROGRAM PRISONERS100;
+        {$IFDEF FPC}
+          {$MODE DELPHI}{$OPTIMIZATION ON,ALL}
+        {$ELSE}
+          {$APPTYPE CONSOLE}
+        {$ENDIF}
+        TYPE
+          TVALUE  = NATIVEUINT;
+          TPVALUE = PNATIVEUINT;
+          TPRISNUM = ARRAY OF TVALUE;
+         
+        CONST
+          ROUNDS  = 1000000;
+          CALREADYSEEN = HIGH(TVALUE);
+        VAR
+          DRAWERS,
+          VISITED,
+          CNTTOPARDONED : TPRISNUM;
+          PRISCOUNT : NATIVEINT;
+         
+        PROCEDURE SHUFFLE(VAR N:TPRISNUM;LMT : NATIVEINT = 0);
+        VAR
+          PN : TPVALUE;
+          I,J : NATIVEINT;
+          TMP: TVALUE;
+        BEGIN
+          PN := @N[0];
+          IF LMT = 0 THEN
+            LMT := HIGH(N);
+          FOR I := LMT DOWNTO 1 DO
+          BEGIN
+            //TAKE ONE FROM INDEX [0..I]
+            J := RANDOM(I+1);
+            //EXCHANGE WITH I
+            TMP := PN[I];PN[I]:= PN[J];PN[J]:= TMP;
+          END;
+        END;
+         
+        PROCEDURE COPYDRAWERS2VISITED;
+        //DRAWERS AND VISITED ARE OF SAME SIZE, SO ONLY MOVING VALUES
+        BEGIN
+          MOVE(DRAWERS[0],VISITED[0],SIZEOF(TVALUE)*PRISCOUNT);
+        END;
+         
+        FUNCTION GETMAXCYCLELEN:NATIVEUINT;
+        VAR
+          PVISITED : TPVALUE;
+          CYCLELEN,MAXCYCLEN,NUM,NUMBEFORE : NATIVEUINT;
+        BEGIN
+          COPYDRAWERS2VISITED;
+          PVISITED := @VISITED[0];
+          MAXCYCLEN := 0;
+          CYCLELEN := MAXCYCLEN;
+          NUM := MAXCYCLEN;
+          REPEAT
+            NUMBEFORE := NUM;
+            NUM := PVISITED[NUM];
+            PVISITED[NUMBEFORE] := CALREADYSEEN;
+            INC(CYCLELEN);
+            IF (NUM= NUMBEFORE) OR (NUM = CALREADYSEEN) THEN
+            BEGIN
+              IF NUM = CALREADYSEEN THEN
+                DEC(CYCLELEN);
+              IF MAXCYCLEN < CYCLELEN THEN
+                MAXCYCLEN := CYCLELEN;
+              NUM := 0;
+              WHILE (NUM< PRISCOUNT) AND (PVISITED[NUM] = CALREADYSEEN) DO
+                INC(NUM);
+              //ALL CYCLES FOUND
+              IF NUM >= PRISCOUNT THEN
+                BREAK;
+              CYCLELEN :=0;
+            END;
+          UNTIL FALSE;
+          GETMAXCYCLELEN := MAXCYCLEN-1;
+        END;
+         
+        PROCEDURE CHECKOPTIMIZED(TESTCOUNT : NATIVEUINT);
+        VAR
+          FACTOR: EXTENDED;
+          I,SUM,DIGIT,DELTA : NATIVEINT;
+        BEGIN
+          FOR I := 1 TO ROUNDS DO
+          BEGIN
+            SHUFFLE(DRAWERS);
+            INC(CNTTOPARDONED[GETMAXCYCLELEN]);
+          END;
+         
+          DIGIT := 0;
+          SUM := ROUNDS;
+          WHILE SUM > 100 DO
+          BEGIN
+            INC(DIGIT);
+            SUM := SUM DIV 10;
+          END;
+          FACTOR := 100.0/ROUNDS;
+         
+          DELTA :=0;
+          SUM := 0;
+  FOR I := 0 TO HIGH(DRAWERS) DO
+  BEGIN
+    INC(SUM,CNTTOPARDONED[I]);
+    DEC(DELTA);
+    IF DELTA <= 0 THEN
+    BEGIN
+      WRITELN(SUM*FACTOR:DIGIT+5:DIGIT,'% GET PARDONED CHECKING MAX ',I+1);
+      DELTA := DELTA+LENGTH(DRAWERS) DIV 10;
+    END;
+  END;
+END;
  
-const
-  rounds  = 1000000;
-  cAlreadySeen = High(tValue);
-var
-  drawers,
-  Visited,
-  CntToPardoned : tPrisNum;
-  PrisCount : NativeInt;
+PROCEDURE ONECOMPARERUN(PRISCNT:NATIVEINT);
+VAR
+  I,LMT :NATIVEINT;
+BEGIN
+  PRISCOUNT := PRISCNT;
+  SETLENGTH(DRAWERS,PRISCNT);
+  FOR I := 0 TO PRISCNT-1 DO
+    DRAWERS[I] := I;
+  SETLENGTH(VISITED,PRISCNT);
+  SETLENGTH(CNTTOPARDONED,PRISCNT);
+  //TEST
+  WRITELN('CHECKING ',PRISCNT,' PRISONERS FOR ',ROUNDS,' ROUNDS');
+  LMT := PRISCNT;
+  CHECKOPTIMIZED(LMT);
+  WRITELN;
  
-procedure shuffle(var N:tPrisNum;lmt : nativeInt = 0);
-var
-  pN : tpValue;
-  i,j : nativeInt;
-  tmp: tValue;
-Begin
-  pN := @N[0];
-  if lmt = 0 then
-    lmt := High(N);
-  For i := lmt downto 1 do
-  begin
-    //take one from index [0..i]
-    j := random(i+1);
-    //exchange with i
-    tmp := pN[i];pN[i]:= pN[j];pN[j]:= tmp;
-  end;
-end;
+  SETLENGTH(CNTTOPARDONED,0);
+  SETLENGTH(VISITED,0);
+  SETLENGTH(DRAWERS,0);
+END;
  
-procedure CopyDrawers2Visited;
-//drawers and Visited are of same size, so only moving values
-Begin
-  Move(drawers[0],Visited[0],SizeOf(tValue)*PrisCount);
-end;
- 
-function GetMaxCycleLen:NativeUint;
-var
-  pVisited : tpValue;
-  cycleLen,MaxCycLen,Num,NumBefore : NativeUInt;
-Begin
-  CopyDrawers2Visited;
-  pVisited := @Visited[0];
-  MaxCycLen := 0;
-  cycleLen := MaxCycLen;
-  Num := MaxCycLen;
-  repeat
-    NumBefore := Num;
-    Num := pVisited[Num];
-    pVisited[NumBefore] := cAlreadySeen;
-    inc(cycleLen);
-    IF (Num= NumBefore) or (Num = cAlreadySeen) then
-    begin
-      IF Num = cAlreadySeen then
-        dec(CycleLen);
-      IF MaxCycLen < cycleLen then
-        MaxCycLen := cycleLen;
-      Num := 0;
-      while (Num< PrisCount) AND (pVisited[Num] = cAlreadySeen) do
-        inc(Num);
-      //all cycles found
-      IF Num >= PrisCount then
-        BREAK;
-      cycleLen :=0;
-    end;
-  until false;
-  GetMaxCycleLen := MaxCycLen-1;
-end;
- 
-procedure CheckOptimized(testCount : NativeUint);
-var
-  factor: extended;
-  i,sum,digit,delta : NativeInt;
-Begin
-  For i := 1 to rounds do
-  begin
-    shuffle(drawers);
-    inc(CntToPardoned[GetMaxCycleLen]);
-  end;
- 
-  digit := 0;
-  sum := rounds;
-  while sum > 100 do
-  Begin
-    inc(digit);
-    sum := sum DIV 10;
-  end;
-  factor := 100.0/rounds;
- 
-  delta :=0;
-  sum := 0;
-  For i := 0 to High(drawers) do
-  Begin
-    inc(sum,CntToPardoned[i]);
-    dec(delta);
-    IF delta <= 0 then
-    Begin
-      writeln(sum*factor:Digit+5:Digit,'% get pardoned checking max ',i+1);
-      delta := delta+Length(drawers) DIV 10;
-    end;
-  end;
-end;
- 
-procedure OneCompareRun(PrisCnt:NativeInt);
-var
-  i,lmt :nativeInt;
-begin
-  PrisCount := PrisCnt;
-  setlength(drawers,PrisCnt);
-  For i := 0 to PrisCnt-1 do
-    drawers[i] := i;
-  setlength(Visited,PrisCnt);
-  setlength(CntToPardoned,PrisCnt);
-  //test
-  writeln('Checking ',PrisCnt,' prisoners for ',rounds,' rounds');
-  lmt := PrisCnt;
-  CheckOptimized(lmt);
-  writeln;
- 
-  setlength(CntToPardoned,0);
-  setlength(Visited,0);
-  setlength(drawers,0);
-end;
- 
-Begin
-  randomize;
-  OneCompareRun(10);
-  OneCompareRun(100);
-  OneCompareRun(1000);
-end.
+BEGIN
+  RANDOMIZE;
+  ONECOMPARERUN(10);
+  ONECOMPARERUN(100);
+  ONECOMPARERUN(1000);
+END.
 
 

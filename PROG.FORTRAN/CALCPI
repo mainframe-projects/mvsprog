@@ -1,21 +1,39 @@
-program pi
-  implicit none
-  integer,dimension(3350) :: vect
-  integer,dimension(201) :: buffer
-  integer :: more,karray,num,k,l,n
-  more = 0
-  vect = 2
-  do n = 1,201
-    karray = 0
-    do l = 3350,1,-1
-      num = 100000*vect(l) + karray*l
-      karray = num/(2*l - 1)
-      vect(l) = num - karray*(2*l - 1)
-    end do
-    k = karray/100000
-    buffer(n) = more + k
-    more = karray - k*100000
-  end do
-  write (*,'(i2,"."/(1x,10i5.5))') buffer
-end program pi
+//FORT     EXEC PGM=IEYFORT,REGION=100K                                 00020000
+//SYSPRINT DD  SYSOUT=A                                                 00040000
+//SYSPUNCH DD  SYSOUT=B                                                 00060000
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(MOD,PASS),UNIT=SYSSQ,             X00080000
+//             SPACE=(80,(200,100),RLSE),DCB=BLKSIZE=80                 00100014
+//LKED EXEC PGM=IEWL,REGION=96K,PARM=(XREF,LET,LIST),COND=(4,LT,FORT)   00120000
+//SYSLIB   DD  DSNAME=SYS1.FORTLIB,DISP=SHR                             00140000
+//SYSLMOD  DD  DSNAME=&GOSET(MAIN),DISP=(NEW,PASS),UNIT=SYSDA,         X00160000
+//             SPACE=(1024,(20,10,1),RLSE),DCB=BLKSIZE=1024             00180014
+//SYSPRINT DD  SYSOUT=A                                                 00200000
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(1024,(100,10),RLSE),DCB=BLKSIZE=1024, X00210018
+//             DSNAME=&SYSUT1                                           00220018
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(OLD,DELETE)                        00240000
+//         DD  DDNAME=SYSIN                                             00260000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((4,LT,FORT),(4,LT,LKED))             00280000
+//FT05F001 DD  DDNAME=SYSIN                                             00300000
+//FT06F001 DD  SYSOUT=A                                                 00320000
+//FT07F001 DD  SYSOUT=B
+        PROGRAM PI
+        IMPLICIT NONE
+        INTEGER,DIMENSION(3350) :: VECT
+        INTEGER,DIMENSION(201) :: BUFFER
+        INTEGER :: MORE,KARRAY,NUM,K,L,N
+        MORE = 0
+        VECT = 2
+        DO N = 1,201
+            KARRAY = 0
+            DO L = 3350,1,-1
+                NUM = 100000*VECT(L) + KARRAY*L
+                KARRAY = NUM/(2*L - 1)
+                VECT(L) = NUM - KARRAY*(2*L - 1)
+            END DO
+            K = KARRAY/100000
+            BUFFER(N) = MORE + K
+            MORE = KARRAY - K*100000
+        END DO
+        WRITE (*,'(I2,"."/(1X,10I5.5))') BUFFER
+        END PROGRAM PI
 

@@ -1,8 +1,15 @@
-* Note: Snobol4+ overflows after 7! because of signed short int limitation.
+//SNOBOL   JOB 1,1,MSGCLASS=A,REGION=512K
+//DATA   EXEC  PGM=SNOBOL4                                              00000200
+//STEPLIB  DD  DSN=TMP.SNOBOL4.LINKLIB,DISP=SHR
+//FT06F001 DD  SYSOUT=A                                                 00000400
+//FT07F001 DD  SYSOUT=A                                                 00000500
+//FT05F001 DD  *
+//
 
-* tail-recursive
-        define('trfact(n,f)') :(trfact_end)
-trfact  trfact = le(n,0) f :s(return)
-        trfact = trfact(n - 1, n * f) :(return)
-trfact_end
+        * NOTE: SNOBOL4+ OVERFLOWS AFTER 7! BECAUSE OF SIGNED SHORT INT LIMITATION.
+        * TAIL-RECURSIVE
+                DEFINE('TRFACT(N,F)') :(TRFACT_END)
+        TRFACT  TRFACT = LE(N,0) F :S(RETURN)
+                TRFACT = TRFACT(N - 1, N * F) :(RETURN)
+        TRFACT_END
 

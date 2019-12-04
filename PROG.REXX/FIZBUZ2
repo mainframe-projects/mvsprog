@@ -1,11 +1,20 @@
-/*REXX program displays numbers  1 ──► 100  (some transformed) for the FizzBuzz problem.*/
-                                                 /*╔═══════════════════════════════════╗*/
-  do j=1  to 100                                 /*║                                   ║*/
-      select                                     /*║                                   ║*/
-      when j//15==0  then say 'FizzBuzz'         /*║ The divisors  (//)  of the  WHENs ║*/
-      when j//5 ==0  then say '    Buzz'         /*║ must be in  descending  order.    ║*/
-      when j//3 ==0  then say '    Fizz'         /*║                                   ║*/
-      otherwise           say right(j, 8)        /*╚═══════════════════════════════════╝*/
-      end   /*select*/
-  end       /*j*/                                /*stick a fork in it,  we're all done. */
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+        /*REXX PROGRAM DISPLAYS NUMBERS  1 ──► 100  (SOME TRANSFORMED) FOR THE FIZZBUZZ PROBLEM.*/
+                                                         /*╔═══════════════════════════════════╗*/
+          DO J=1  TO 100                                 /*║                                   ║*/
+              SELECT                                     /*║                                   ║*/
+              WHEN J//15==0  THEN SAY 'FIZZBUZZ'         /*║ THE DIVISORS  (//)  OF THE  WHENS ║*/
+              WHEN J//5 ==0  THEN SAY '    BUZZ'         /*║ MUST BE IN  DESCENDING  ORDER.    ║*/
+              WHEN J//3 ==0  THEN SAY '    FIZZ'         /*║                                   ║*/
+              OTHERWISE           SAY RIGHT(J, 8)        /*╚═══════════════════════════════════╝*/
+              END   /*SELECT*/
+          END       /*J*/                                /*STICK A FORK IN IT,  WE'RE ALL DONE. */
 

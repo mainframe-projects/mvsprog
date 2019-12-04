@@ -1,23 +1,32 @@
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
 /*REXX program computes the factorial of a  non-negative integer, and it automatically  */
 /*────────────────────── adjusts the number of decimal digits to accommodate the answer.*/
-numeric digits 99                                /*99 digits initially,  then expanded. */
-parse arg n                                      /*obtain optional argument from the CL.*/
-if n=''                   then call er  'no argument specified'
-if arg()>1 | words(n)>1   then call er  'too many arguments specified.'
-if \datatype(n,'N')       then call er  "argument isn't numeric: "          n
-if \datatype(n,'W')       then call er  "argument isn't a whole number: "   n
-if n<0                    then call er  "argument can't be negative: "      n
-!=1                                              /*define the factorial product (so far)*/
-     do j=2 to n;    !=!*j                       /*compute  the factorial the hard way. */
-     if pos(.,!)==0  then iterate                /*is the  !  in exponential notation?  */
-     parse var ! 'E' digs                        /*extract exponent of the factorial,   */
-     numeric digits  digs+digs%10                /*  ··· and increase it by ten percent.*/
-     end   /*j*/                                 /* [↑]  where da rubber meets da road. */
- 
-say n'!  is  ['length(!) "digits]:"              /*display number of digits in factorial*/
-say                                              /*add some whitespace to the output.   */
-say !/1                                          /*normalize the factorial product.     */
-exit                                             /*stick a fork in it,  we're all done. */
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-er:    say;      say '***error!***';      say;       say arg(1);      say;         exit 13
+        NUMERIC DIGITS 99                                /*99 DIGITS INITIALLY,  THEN EXPANDED. */
+        PARSE ARG N                                      /*OBTAIN OPTIONAL ARGUMENT FROM THE CL.*/
+        IF N=''                   THEN CALL ER  'NO ARGUMENT SPECIFIED'
+        IF ARG()>1 | WORDS(N)>1   THEN CALL ER  'TOO MANY ARGUMENTS SPECIFIED.'
+        IF \DATATYPE(N,'N')       THEN CALL ER  "ARGUMENT ISN'T NUMERIC: "          N
+        IF \DATATYPE(N,'W')       THEN CALL ER  "ARGUMENT ISN'T A WHOLE NUMBER: "   N
+        IF N<0                    THEN CALL ER  "ARGUMENT CAN'T BE NEGATIVE: "      N
+        !=1                                              /*DEFINE THE FACTORIAL PRODUCT (SO FAR)*/
+             DO J=2 TO N;    !=!*J                       /*COMPUTE  THE FACTORIAL THE HARD WAY. */
+             IF POS(.,!)==0  THEN ITERATE                /*IS THE  !  IN EXPONENTIAL NOTATION?  */
+             PARSE VAR ! 'E' DIGS                        /*EXTRACT EXPONENT OF THE FACTORIAL,   */
+             NUMERIC DIGITS  DIGS+DIGS%10                /*  ··· AND INCREASE IT BY TEN PERCENT.*/
+             END   /*J*/                                 /* [↑]  WHERE DA RUBBER MEETS DA ROAD. */
+         
+        SAY N'!  IS  ['LENGTH(!) "DIGITS]:"              /*DISPLAY NUMBER OF DIGITS IN FACTORIAL*/
+        SAY                                              /*ADD SOME WHITESPACE TO THE OUTPUT.   */
+        SAY !/1                                          /*NORMALIZE THE FACTORIAL PRODUCT.     */
+        EXIT                                             /*STICK A FORK IN IT,  WE'RE ALL DONE. */
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        ER:    SAY;      SAY '***ERROR!***';      SAY;       SAY ARG(1);      SAY;         EXIT 13
 

@@ -1,11 +1,32 @@
-comment  ALGOL68 recursive
+//ALGOL EXEC PGM=ALGOL,REGION=48K                                       00020000
+//SYSPRINT DD SYSOUT=A                                                  00040000
+//SYSPUNCH DD SYSOUT=B                                                  00060000
+//SYSLIN DD DSN=&LOADSET,UNIT=SYSSQ,SEP=SYSPUNCH,SPACE=(3600,(10,4)),  *00080000
+//          DISP=(MOD,PASS)                                             00100000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSSQ,SEP=SYSPRINT,SPACE=(1024,(50,10))    00120000
+//SYSUT2 DD DSN=&SYSUT2,UNIT=SYSSQ,SEP=SYSUT1,SPACE=(1024,(50,10))      00140000
+//SYSUT3 DD DSN=&SYSUT3,UNIT=SYSDA,SPACE=(1024,(40,10))                 00160000
+//LKED EXEC PGM=IEWL,PARM='XREF,LIST,LET',COND=(5,LT,ALGOL),REGION=96K  00180000
+//SYSPRINT DD SYSOUT=A                                                  00200000
+//SYSLIN DD DSN=&LOADSET,DISP=(OLD,DELETE)                              00220000
+//       DD DDNAME=SYSIN                                                00240000
+//SYSLIB DD DSN=SYS1.ALGLIB,DISP=SHR                                    00260000
+//SYSLMOD DD DSN=&GOSET(GO),UNIT=SYSDA,DISP=(MOD,PASS),                *00280000
+//           SPACE=(1024,(50,20,1))                                     00300000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSDA,SEP=(SYSLIB,SYSLMOD),               *00320000
+//          SPACE=(1024,(50,20))                                        00340000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((5,LT,ALGOL),(5,LT,LKED))            00360000
+//ALGLDD01 DD SYSOUT=A                                                  00380000
+//SYSPRINT DD SYSOUT=A                                                  00400000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSSQ,SPACE=(1024,(20,10))                 00420000
+        COMMENT  ALGOL68 RECURSIVE
 
-PROC factorial = (INT n)LONG LONG INT:
-  CASE n+1 IN
-    1,1,2,6,24,120,720 # a brief lookup #
-  OUT
-    n*factorial(n-1)
-  ESAC
-; ~
+        PROC FACTORIAL = (INT N)LONG LONG INT:
+          CASE N+1 IN
+            1,1,2,6,24,120,720 # A BRIEF LOOKUP #
+          OUT
+            N*FACTORIAL(N-1)
+          ESAC
+        ; ~
 
 

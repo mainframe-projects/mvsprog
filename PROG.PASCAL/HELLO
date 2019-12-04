@@ -1,5 +1,17 @@
-program byeworld;
-begin
- writeln('Hello world!');
-end.
+//PASC   JOB 'HELLO', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        PROGRAM BYEWORLD;
+        BEGIN
+             WRITELN('HELLO WORLD!');
+        END.
 

@@ -1,14 +1,24 @@
-/* Finds the N-th root of the number A */
-root: procedure (A, N) returns (float);
-   declare A float, N fixed binary;
-   declare (xi, xip1) float;
- 
-   xi = 1; /* An initial guess */
-   do forever;
-      xip1 = ((n-1)*xi + A/xi**(n-1) ) / n;
-      if abs(xip1-xi) < 1e-5 then leave;
-      xi = xip1;
-   end;
-   return (xi);
-end root;
+//LKED   EXEC  PGM=IEWL,PARM='XREF,LIST',REGION=96K                     09000001
+//SYSLIB   DD  DSNAME=SYS1.PL1LIB,DISP=SHR                              18000001
+//SYSLMOD  DD  DSNAME=&&GOSET(GO),DISP=(MOD,PASS),                     *27000001
+//             UNIT=SYSDA,SPACE=(1024,(50,20,1),RLSE)                   36000001
+//SYSUT1   DD  DSNAME=&&SYSUT1,UNIT=SYSDA,SPACE=(1024,(200,20)),       *45000001
+//             SEP=(SYSLMOD,SYSLIB),DCB=BLKSIZE=1024                    54000019
+//SYSPRINT DD  SYSOUT=A                                                 63000001
+//SYSLIN   DD  DDNAME=SYSIN                                             72000001
+//GO     EXEC  PGM=*.LKED.SYSLMOD,COND=(9,LT,LKED)                      81000001
+//SYSPRINT DD  SYSOUT=A                                                 90000001
+        /* FINDS THE N-TH ROOT OF THE NUMBER A */
+        ROOT: PROCEDURE (A, N) RETURNS (FLOAT);
+           DECLARE A FLOAT, N FIXED BINARY;
+           DECLARE (XI, XIP1) FLOAT;
+         
+           XI = 1; /* AN INITIAL GUESS */
+           DO FOREVER;
+              XIP1 = ((N-1)*XI + A/XI**(N-1) ) / N;
+              IF ABS(XIP1-XI) < 1E-5 THEN LEAVE;
+              XI = XIP1;
+           END;
+           RETURN (XI);
+        END ROOT;
 

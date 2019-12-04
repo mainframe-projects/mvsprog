@@ -1,43 +1,53 @@
-/* Uses the algorithm of S. Rabinowicz and S. Wagon, "A Spigot Algorithm */
-/* for the Digits of Pi".                                                */
-(subrg, fofl, size):
-Pi_Spigot: procedure options (main);                 /* 21 January 2012. */
-   declare (n, len) fixed binary;
- 
-   n = 1000;
-   len = 10*n / 3;
-   begin;
-      declare ( i, j, k, q, nines, predigit ) fixed binary;
-      declare x fixed binary (31);
-      declare a(len) fixed binary (31);
- 
-      a = 2; /* Start with 2s */
-      nines, predigit = 0; /* First predigit is a 0 */
-      do j = 1 to n;
-         q = 0;
-         do i = len to 1 by -1; /* Work backwards */
-            x = 10*a(i) + q*i;
-            a(i) = mod (x, (2*i-1));
-            q = x / (2*i-1);
-         end;
-         a(1) = mod(q, 10); q = q / 10;
-         if q = 9 then nines = nines + 1;
-         else if q = 10 then
-            do;
-               put edit(predigit+1) (f(1));
-               do k = 1 to nines;
-                  put edit ('0')(a(1)); /* zeros */
-               end;
-               predigit, nines = 0;
-            end;
-         else
-            do;
-               put edit(predigit) (f(1)); predigit = q;
-               do k = 1 to nines; put edit ('9')(a(1)); end;
-               nines = 0;
-            end;
-      end;
-      put edit(predigit) (f(1));
-   end; /* of begin block */
-end Pi_Spigot;
+//LKED   EXEC  PGM=IEWL,PARM='XREF,LIST',REGION=96K                     09000001
+//SYSLIB   DD  DSNAME=SYS1.PL1LIB,DISP=SHR                              18000001
+//SYSLMOD  DD  DSNAME=&&GOSET(GO),DISP=(MOD,PASS),                     *27000001
+//             UNIT=SYSDA,SPACE=(1024,(50,20,1),RLSE)                   36000001
+//SYSUT1   DD  DSNAME=&&SYSUT1,UNIT=SYSDA,SPACE=(1024,(200,20)),       *45000001
+//             SEP=(SYSLMOD,SYSLIB),DCB=BLKSIZE=1024                    54000019
+//SYSPRINT DD  SYSOUT=A                                                 63000001
+//SYSLIN   DD  DDNAME=SYSIN                                             72000001
+//GO     EXEC  PGM=*.LKED.SYSLMOD,COND=(9,LT,LKED)                      81000001
+//SYSPRINT DD  SYSOUT=A                                                 90000001
+        /* USES THE ALGORITHM OF S. RABINOWICZ AND S. WAGON, "A SPIGOT ALGORITHM */
+        /* FOR THE DIGITS OF PI".                                                */
+        (SUBRG, FOFL, SIZE):
+        PI_SPIGOT: PROCEDURE OPTIONS (MAIN);                 /* 21 JANUARY 2012. */
+           DECLARE (N, LEN) FIXED BINARY;
+         
+           N = 1000;
+           LEN = 10*N / 3;
+           BEGIN;
+              DECLARE ( I, J, K, Q, NINES, PREDIGIT ) FIXED BINARY;
+              DECLARE X FIXED BINARY (31);
+              DECLARE A(LEN) FIXED BINARY (31);
+         
+              A = 2; /* START WITH 2S */
+              NINES, PREDIGIT = 0; /* FIRST PREDIGIT IS A 0 */
+              DO J = 1 TO N;
+                 Q = 0;
+                 DO I = LEN TO 1 BY -1; /* WORK BACKWARDS */
+                    X = 10*A(I) + Q*I;
+                    A(I) = MOD (X, (2*I-1));
+                    Q = X / (2*I-1);
+                 END;
+                 A(1) = MOD(Q, 10); Q = Q / 10;
+                 IF Q = 9 THEN NINES = NINES + 1;
+                 ELSE IF Q = 10 THEN
+                    DO;
+                       PUT EDIT(PREDIGIT+1) (F(1));
+                       DO K = 1 TO NINES;
+                          PUT EDIT ('0')(A(1)); /* ZEROS */
+                       END;
+                       PREDIGIT, NINES = 0;
+                    END;
+                 ELSE
+                    DO;
+                       PUT EDIT(PREDIGIT) (F(1)); PREDIGIT = Q;
+                       DO K = 1 TO NINES; PUT EDIT ('9')(A(1)); END;
+                       NINES = 0;
+                    END;
+              END;
+              PUT EDIT(PREDIGIT) (F(1));
+           END; /* OF BEGIN BLOCK */
+        END PI_SPIGOT;
 

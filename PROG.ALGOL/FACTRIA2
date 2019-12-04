@@ -1,34 +1,55 @@
-comment     algol 68 numerical approximation
+//ALGOL EXEC PGM=ALGOL,REGION=48K                                       00020000
+//SYSPRINT DD SYSOUT=A                                                  00040000
+//SYSPUNCH DD SYSOUT=B                                                  00060000
+//SYSLIN DD DSN=&LOADSET,UNIT=SYSSQ,SEP=SYSPUNCH,SPACE=(3600,(10,4)),  *00080000
+//          DISP=(MOD,PASS)                                             00100000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSSQ,SEP=SYSPRINT,SPACE=(1024,(50,10))    00120000
+//SYSUT2 DD DSN=&SYSUT2,UNIT=SYSSQ,SEP=SYSUT1,SPACE=(1024,(50,10))      00140000
+//SYSUT3 DD DSN=&SYSUT3,UNIT=SYSDA,SPACE=(1024,(40,10))                 00160000
+//LKED EXEC PGM=IEWL,PARM='XREF,LIST,LET',COND=(5,LT,ALGOL),REGION=96K  00180000
+//SYSPRINT DD SYSOUT=A                                                  00200000
+//SYSLIN DD DSN=&LOADSET,DISP=(OLD,DELETE)                              00220000
+//       DD DDNAME=SYSIN                                                00240000
+//SYSLIB DD DSN=SYS1.ALGLIB,DISP=SHR                                    00260000
+//SYSLMOD DD DSN=&GOSET(GO),UNIT=SYSDA,DISP=(MOD,PASS),                *00280000
+//           SPACE=(1024,(50,20,1))                                     00300000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSDA,SEP=(SYSLIB,SYSLMOD),               *00320000
+//          SPACE=(1024,(50,20))                                        00340000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((5,LT,ALGOL),(5,LT,LKED))            00360000
+//ALGLDD01 DD SYSOUT=A                                                  00380000
+//SYSPRINT DD SYSOUT=A                                                  00400000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSSQ,SPACE=(1024,(20,10))                 00420000
+        COMMENT     ALGOL 68 NUMERICAL APPROXIMATION
 
-INT g = 7;
-[]REAL p = []REAL(0.99999999999980993, 676.5203681218851,   -1259.1392167224028,
-                771.32342877765313,   -176.61502916214059,     12.507343278686905,
-                 -0.13857109526572012,   9.9843695780195716e-6, 1.5056327351493116e-7)[@0];
+        INT G = 7;
+        []REAL P = []REAL(0.99999999999980993, 676.5203681218851,   -1259.1392167224028,
+                        771.32342877765313,   -176.61502916214059,     12.507343278686905,
+                         -0.13857109526572012,   9.9843695780195716E-6, 1.5056327351493116E-7)[@0];
 
-PROC complex gamma = (COMPL in z)COMPL: (
-  # Reflection formula #
-  COMPL z := in z;
-  IF re OF z < 0.5 THEN
-    pi / (complex sin(pi*z)*complex gamma(1-z))
-  ELSE
-    z -:= 1;
-    COMPL x := p[0];
-    FOR i TO g+1 DO x +:= p[i]/(z+i) OD;
-    COMPL t := z + g + 0.5;
-    complex sqrt(2*pi) * t**(z+0.5) * complex exp(-t) * x
-  FI
-);
+        PROC COMPLEX GAMMA = (COMPL IN Z)COMPL: (
+          # REFLECTION FORMULA #
+          COMPL Z := IN Z;
+          IF RE OF Z < 0.5 THEN
+            PI / (COMPLEX SIN(PI*Z)*COMPLEX GAMMA(1-Z))
+          ELSE
+            Z -:= 1;
+            COMPL X := P[0];
+            FOR I TO G+1 DO X +:= P[I]/(Z+I) OD;
+            COMPL T := Z + G + 0.5;
+            COMPLEX SQRT(2*PI) * T**(Z+0.5) * COMPLEX EXP(-T) * X
+          FI
+        );
 
-OP ** = (COMPL z, p)COMPL: ( z=0|0|complex exp(complex ln(z)*p) );
-PROC factorial = (COMPL n)COMPL: complex gamma(n+1);
+        OP ** = (COMPL Z, P)COMPL: ( Z=0|0|COMPLEX EXP(COMPLEX LN(Z)*P) );
+        PROC FACTORIAL = (COMPL N)COMPL: COMPLEX GAMMA(N+1);
 
-FORMAT compl fmt = $g(-16, 8)"⊥"g(-10, 8)$;
+        FORMAT COMPL FMT = $G(-16, 8)"⊥"G(-10, 8)$;
 
-test:(
-  printf(($q"factorial(-0.5)**2="f(compl fmt)l$, factorial(-0.5)**2));
-  FOR i TO 9 DO
-    printf(($q"factorial("d")="f(compl fmt)l$, i, factorial(i)))
-  OD
-)
+        TEST:(
+          PRINTF(($Q"FACTORIAL(-0.5)**2="F(COMPL FMT)L$, FACTORIAL(-0.5)**2));
+          FOR I TO 9 DO
+            PRINTF(($Q"FACTORIAL("D")="F(COMPL FMT)L$, I, FACTORIAL(I)))
+          OD
+        )
 
 

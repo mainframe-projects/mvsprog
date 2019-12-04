@@ -1,5 +1,18 @@
-BEGIN
-   OUTTEXT("Hello world!");
-   OUTIMAGE
-END
+//SIMU  JOB 'HELLO WORLD'
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1000K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC SIMCLG,
+//      PARM.SIM='',
+//      PARM.LKED='MAP,LIST,LET',
+//      PARM.GO='LINECNT=64'
+//SIM.SYSIN DD *
+/*
+//GO.SYSOUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+            BEGIN
+               OUTTEXT("Hello world!");
+               OUTIMAGE
+            END
 

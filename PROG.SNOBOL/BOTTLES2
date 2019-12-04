@@ -1,9 +1,16 @@
-	cr = char(13) char(10); n = 99; ob = " of beer"; otw = " on the wall"
-more	output = (nobb = (gt(n,0) n,"No more") " bottle" (eq(n,1),"s") ob) otw
-+	  ", " replace(nobb,"N","n") "." cr 
-+	  (gt(n,0) "Take one down and pass it around",
-+	   "Go to the store and buy some more" ?(n = 100)) ", " ?(n = n - 1)
-+         (gt(n,0) n, "no more") " bottle" (eq(n,1),"s") ob otw "."
-	output = lt(n,99) cr				:s(more)
-end
+//SNOBOL   JOB 1,1,MSGCLASS=A,REGION=512K
+//DATA   EXEC  PGM=SNOBOL4                                              00000200
+//STEPLIB  DD  DSN=TMP.SNOBOL4.LINKLIB,DISP=SHR
+//FT06F001 DD  SYSOUT=A                                                 00000400
+//FT07F001 DD  SYSOUT=A                                                 00000500
+//FT05F001 DD  *
+//
+            CR = CHAR(13) CHAR(10); N = 99; OB = " OF BEER"; OTW = " ON THE WALL"
+        MORE	OUTPUT = (NOBB = (GT(N,0) N,"NO MORE") " BOTTLE" (EQ(N,1),"S") OB) OTW
+        +	  ", " REPLACE(NOBB,"N","N") "." CR 
+        +	  (GT(N,0) "TAKE ONE DOWN AND PASS IT AROUND",
+        +	   "GO TO THE STORE AND BUY SOME MORE" ?(N = 100)) ", " ?(N = N - 1)
+        +         (GT(N,0) N, "NO MORE") " BOTTLE" (EQ(N,1),"S") OB OTW "."
+            OUTPUT = LT(N,99) CR				:S(MORE)
+        END
 

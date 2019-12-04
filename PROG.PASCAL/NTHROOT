@@ -1,16 +1,28 @@
-USES
-   Math;
- 
-function NthRoot(A, Precision: Double; n: Integer): Double;
-var
-   x_p, X: Double;
-begin
-   x_p := Sqrt(A);
-   while Abs(A - Power(x_p, n)) > Precision do
-   begin
-      x := (1/n) * (((n-1) * x_p) + (A/(Power(x_p, n - 1))));
-      x_p := x;
-   end;
-   Result := x_p;
-end;
+//PASC   JOB 'NTHROOT', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        USES
+           MATH;
+         
+        FUNCTION NTHROOT(A, PRECISION: DOUBLE; N: INTEGER): DOUBLE;
+        VAR
+           X_P, X: DOUBLE;
+        BEGIN
+           X_P := SQRT(A);
+           WHILE ABS(A - POWER(X_P, N)) > PRECISION DO
+           BEGIN
+              X := (1/N) * (((N-1) * X_P) + (A/(POWER(X_P, N - 1))));
+              X_P := X;
+           END;
+           RESULT := X_P;
+        END;
 

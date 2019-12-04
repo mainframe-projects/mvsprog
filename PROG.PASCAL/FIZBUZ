@@ -1,15 +1,27 @@
-program fizzbuzz(output);
-var
-  i: integer;
-begin
-  for i := 1 to 100 do
-    if i mod 15 = 0 then
-      writeln('FizzBuzz')
-    else if i mod 3 = 0 then
-      writeln('Fizz')
-    else if i mod 5 = 0 then
-      writeln('Buzz')
-    else
-      writeln(i)
-end.
+//PASC   JOB 'FIZZBUZZ', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        PROGRAM FIZZBUZZ(OUTPUT);
+        VAR
+          I: INTEGER;
+        BEGIN
+          FOR I := 1 TO 100 DO
+            IF I MOD 15 = 0 THEN
+              WRITELN('FIZZBUZZ')
+            ELSE IF I MOD 3 = 0 THEN
+              WRITELN('FIZZ')
+            ELSE IF I MOD 5 = 0 THEN
+              WRITELN('BUZZ')
+            ELSE
+              WRITELN(I)
+        END.
 

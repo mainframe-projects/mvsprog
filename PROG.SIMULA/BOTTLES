@@ -1,33 +1,46 @@
-BEGIN
-  COMMENT
-     Simula version of 99 beers
-     Maciej Macowicz (mm@cpe.ipl.fr)
-     Status: UNTESTED :)
+//SIMU  JOB 'BOTTLES OF BEER'
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1000K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC SIMCLG,
+//      PARM.SIM='',
+//      PARM.LKED='MAP,LIST,LET',
+//      PARM.GO='LINECNT=64'
+//SIM.SYSIN DD *
+/*
+//GO.SYSOUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        BEGIN
+          COMMENT
+             SIMULA VERSION OF 99 BEERS
+             MACIEJ MACOWICZ (MM@CPE.IPL.FR)
+             STATUS: UNTESTED :)
 
-     Amended 2007-03-10 by Jack Leunissen (jack.leunissen@wur.nl)
-     Status: WORKING (at least it prints and counts correctly)
-  ;
-  INTEGER bottles;
-  INTEGER num;
+             AMENDED 2007-03-10 BY JACK LEUNISSEN (JACK.LEUNISSEN@WUR.NL)
+             STATUS: WORKING (AT LEAST IT PRINTS AND COUNTS CORRECTLY)
+          ;
+          INTEGER BOTTLES;
+          INTEGER NUM;
 
-  num := 2;
-  FOR bottles:= 99 STEP -1 UNTIL 1 DO 
-  BEGIN
-    IF (bottles < 10) THEN num := 1;
-    OutInt(bottles,num);
-    OutText(" bottle(s) of beer on the wall, ");
-    OutInt(bottles,num);
-    OutText(" bottle(s) of beer");
-    OutImage;
-    Outtext("Take one down, pass it around, ");
-    OutInt(bottles - 1,num);
-    OutText(" bottle(s) of beer on the wall. ");
-    OutImage;
-    OutImage;
-  END;
-  OutText("1 bottle of beer on the wall, one bottle of beer."); 
-  OutImage;
-  OutText("Take one down, pass it around, ");
-  OutText("no more bottles of beer on the wall");
-  OutImage
-END
+          NUM := 2;
+          FOR BOTTLES:= 99 STEP -1 UNTIL 1 DO 
+          BEGIN
+            IF (BOTTLES < 10) THEN NUM := 1;
+            OUTINT(BOTTLES,NUM);
+            OUTTEXT(" BOTTLE(S) OF BEER ON THE WALL, ");
+            OUTINT(BOTTLES,NUM);
+            OUTTEXT(" BOTTLE(S) OF BEER");
+            OUTIMAGE;
+            OUTTEXT("TAKE ONE DOWN, PASS IT AROUND, ");
+            OUTINT(BOTTLES - 1,NUM);
+            OUTTEXT(" BOTTLE(S) OF BEER ON THE WALL. ");
+            OUTIMAGE;
+            OUTIMAGE;
+          END;
+          OUTTEXT("1 BOTTLE OF BEER ON THE WALL, ONE BOTTLE OF BEER."); 
+          OUTIMAGE;
+          OUTTEXT("TAKE ONE DOWN, PASS IT AROUND, ");
+          OUTTEXT("NO MORE BOTTLES OF BEER ON THE WALL");
+          OUTIMAGE
+        END

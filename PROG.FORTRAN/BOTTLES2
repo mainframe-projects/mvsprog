@@ -1,36 +1,54 @@
-program ninetyninebottles
-      integer bottles
+//FORT     EXEC PGM=IEYFORT,REGION=100K                                 00020000
+//SYSPRINT DD  SYSOUT=A                                                 00040000
+//SYSPUNCH DD  SYSOUT=B                                                 00060000
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(MOD,PASS),UNIT=SYSSQ,             X00080000
+//             SPACE=(80,(200,100),RLSE),DCB=BLKSIZE=80                 00100014
+//LKED EXEC PGM=IEWL,REGION=96K,PARM=(XREF,LET,LIST),COND=(4,LT,FORT)   00120000
+//SYSLIB   DD  DSNAME=SYS1.FORTLIB,DISP=SHR                             00140000
+//SYSLMOD  DD  DSNAME=&GOSET(MAIN),DISP=(NEW,PASS),UNIT=SYSDA,         X00160000
+//             SPACE=(1024,(20,10,1),RLSE),DCB=BLKSIZE=1024             00180014
+//SYSPRINT DD  SYSOUT=A                                                 00200000
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(1024,(100,10),RLSE),DCB=BLKSIZE=1024, X00210018
+//             DSNAME=&SYSUT1                                           00220018
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(OLD,DELETE)                        00240000
+//         DD  DDNAME=SYSIN                                             00260000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((4,LT,FORT),(4,LT,LKED))             00280000
+//FT05F001 DD  DDNAME=SYSIN                                             00300000
+//FT06F001 DD  SYSOUT=A                                                 00320000
+//FT07F001 DD  SYSOUT=B
+        PROGRAM NINETYNINEBOTTLES
+        INTEGER BOTTLES
 
-*     99 Bottles of Beer, as implemented in FORTRAN 77
-*     Written by Alex Ford - gustavderdrache@bellsouth.net
-*     Notable feature: Arithmetic IF statement
+       *     99 BOTTLES OF BEER, AS IMPLEMENTED IN FORTRAN 77
+       *     WRITTEN BY ALEX FORD - GUSTAVDERDRACHE@BELLSOUTH.NET
+       *     NOTABLE FEATURE: ARITHMETIC IF STATEMENT
 
-      bottles = 99
+        BOTTLES = 99
 
-*     Format statements
- 1    format (I2, A)
- 2    format (A)
- 3    format (I2, A, /)
- 4    format (A, /)
+       *     FORMAT STATEMENTS
+1       FORMAT (I2, A)
+2       FORMAT (A)
+3       FORMAT (I2, A, /)
+4       FORMAT (A, /)
 
-*     First 98 or so verses
- 10   write (*,1) bottles, ' bottles of beer on the wall,'
-      write (*,1) bottles, ' bottles of beer.'
-      write (*,2) 'Take one down, pass it around...'
-      if (bottles - 1 .gt. 1) then
-         write (*,3) bottles - 1, ' bottles of beer on the wall.'
-      else
-         write (*,3) bottles - 1, ' bottle of beer on the wall.'
-      end if
+       *     FIRST 98 OR SO VERSES
+10      WRITE (*,1) BOTTLES, ' BOTTLES OF BEER ON THE WALL,'
+        WRITE (*,1) BOTTLES, ' BOTTLES OF BEER.'
+        WRITE (*,2) 'TAKE ONE DOWN, PASS IT AROUND...'
+        IF (BOTTLES - 1 .GT. 1) THEN
+            WRITE (*,3) BOTTLES - 1, ' BOTTLES OF BEER ON THE WALL.'
+        ELSE
+            WRITE (*,3) BOTTLES - 1, ' BOTTLE OF BEER ON THE WALL.'
+        END IF
 
-      bottles = bottles - 1
+        BOTTLES = BOTTLES - 1
 
-      if (bottles - 1) 30, 20, 10
+        IF (BOTTLES - 1) 30, 20, 10
 
-*     Last verse
- 20   write (*,1) bottles, ' bottle of beer on the wall,'
-      write (*,1) bottles, ' bottle of beer.'
-      write (*,2) 'Take one down, pass it around...'
-      write (*,4) 'No bottles of beer on the wall.'
+       *     LAST VERSE
+20      WRITE (*,1) BOTTLES, ' BOTTLE OF BEER ON THE WALL,'
+        WRITE (*,1) BOTTLES, ' BOTTLE OF BEER.'
+        WRITE (*,2) 'TAKE ONE DOWN, PASS IT AROUND...'
+        WRITE (*,4) 'NO BOTTLES OF BEER ON THE WALL.'
 
- 30   stop
+30      STOP

@@ -1,197 +1,208 @@
-PROGRAM Penney;
+//PASC   JOB 'PENNEY', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+        PROGRAM PENNEY;
+         
+        TYPE
+            COINTOSS = (HEADS, TAILS);
+            SEQUENCE = ARRAY [1..3] OF COINTOSS;
+            PLAYER = RECORD
+                BET: SEQUENCE;
+                SCORE: INTEGER;
+            END;
+         
+        VAR
+            HUMAN, COMPUTER: PLAYER;
+            ROUNDS, COUNT: INTEGER;
+         
+        FUNCTION TOSSCOIN: COINTOSS;
+        { RETURNS HEADS OR TAILS AT RANDOM }
+        BEGIN
+            IF RANDOM(2) = 1 THEN TOSSCOIN := HEADS
+            ELSE TOSSCOIN := TAILS
+        END;
+         
+        PROCEDURE PUTTOSS(TOSS: COINTOSS);
+        { OUTPUTS HEADS OR TAILS AS A LETTER }
+        BEGIN
+            IF TOSS = HEADS THEN WRITE('H')
+            ELSE WRITE('T')
+        END;
+         
+        FUNCTION GETTOSS: COINTOSS;
+        { READS H OR T FROM THE KEYBOARD IN EITHER LETTERCASE }
+        VAR C: CHAR;
+        BEGIN
+            { KEEP READING CHARACTERS UNTIL WE GET AN APPROPRIATE LETTER }
+            REPEAT READ(C) UNTIL C IN ['H', 'H', 'T', 'T'];
+            { INTERPRET THE LETTER }
+            IF C IN ['H', 'H'] THEN GETTOSS := HEADS
+            ELSE GETTOSS := TAILS
+        END;
+         
+        PROCEDURE SHOWSEQUENCE(TOSSES: SEQUENCE);
+        { OUTPUTS THREE COIN TOSSES AT ONCE }
+        VAR
+            I: INTEGER;
+        BEGIN
+            FOR I := 1 TO 3 DO PUTTOSS(TOSSES[I])
+        END;
+         
+        PROCEDURE READSEQUENCE(VAR TOSSES: SEQUENCE);
+        { ACCEPTS THREE COIN TOSSES FROM THE KEYBOARD }
+        VAR I: INTEGER;
+        BEGIN
+            { GET THE 3 LETTERS }
+            FOR I := 1 TO 3 DO TOSSES[I] := GETTOSS;
+            { IGNORE THE REST OF THE LINE }
+            READLN
+        END;
+         
+        FUNCTION OPTIMUM(OPPONENT: SEQUENCE): SEQUENCE;
+        { GENERATES THE OPTIMUM SEQUENCE AGAINST AN OPPONENT }
+        BEGIN
+            CASE OPPONENT[2] OF
+                HEADS: OPTIMUM[1] := TAILS;
+                TAILS: OPTIMUM[1] := HEADS
+            END;
+            OPTIMUM[2] := OPPONENT[1];
+            OPTIMUM[3] := OPPONENT[2]
+        END;
+         
+        FUNCTION RANDOMSEQUENCE: SEQUENCE;
+        { GENERATES THREE RANDOM COIN TOSSES }
+        VAR
+            I: INTEGER;
+        BEGIN
+            FOR I := 1 TO 3 DO RANDOMSEQUENCE[I] := TOSSCOIN
+        END;
+         
+        FUNCTION MATCH(FIRST, SECOND: SEQUENCE): BOOLEAN;
+        { DETECTS WHETHER A SEQUENCE OF TOSSES MATCHES ANOTHER }
+        VAR
+            DIFFERENT: BOOLEAN;
+            I: INTEGER;
+        BEGIN
+            DIFFERENT := FALSE;
+            I := 1;
+            WHILE (I <= 3) AND NOT DIFFERENT DO BEGIN
+                IF NOT (FIRST[I] = SECOND[I]) THEN DIFFERENT := TRUE;
+                I := I + 1
+            END;
+            MATCH := NOT DIFFERENT
+        END;
+         
+        PROCEDURE PLAYROUND(VAR HUMAN, COMPUTER: PLAYER);
+        { SHOWS COIN TOSSES AND ANNOUNCES THE WINNER }
+        VAR
+            { WE ONLY EVER NEED TO STORE THE 3 MOST RECENT TOSSES IN MEMORY. }
+            TOSSES: SEQUENCE;
+        BEGIN
+            { START WITH THE FIRST THREE TOSSES }
+            WRITE('TOSSING THE COIN: ');
+    TOSSES := RANDOMSEQUENCE;
+    SHOWSEQUENCE(TOSSES);
+    { KEEP TOSSING THE COIN UNTIL THERE IS A WINNER. }
+    WHILE NOT (MATCH(HUMAN.BET, TOSSES) OR MATCH(COMPUTER.BET, TOSSES)) DO BEGIN
+        TOSSES[1] := TOSSES[2];
+        TOSSES[2] := TOSSES[3];
+        TOSSES[3] := TOSSCOIN;
+        PUTTOSS(TOSSES[3])
+    END;
+    { UPDATE THE WINNER'S SCORE AND ANNOUNCE THE WINNER }
+    WRITELN;
+    WRITELN;
+    IF MATCH(HUMAN.BET, TOSSES) THEN BEGIN
+        WRITELN('CONGRATULATIONS! YOU WON THIS ROUND.');
+        HUMAN.SCORE := HUMAN.SCORE + 1;
+        WRITELN('YOUR NEW SCORE IS ', HUMAN.SCORE, '.')
+    END
+    ELSE BEGIN
+        WRITELN('YAY, I WON THIS ROUND!');
+        COMPUTER.SCORE := COMPUTER.SCORE + 1;
+        WRITELN('MY NEW SCORE IS ', COMPUTER.SCORE, '.')
+    END
+END;
  
-TYPE
-    CoinToss = (heads, tails);
-    Sequence = array [1..3] of CoinToss;
-    Player = record
-        bet: Sequence;
-        score: integer;
-    end;
- 
-VAR
-    Human, Computer: Player;
-    Rounds, Count: integer;
- 
-Function TossCoin: CoinToss;
-{ Returns heads or tails at random }
-Begin
-    if random(2) = 1 then TossCoin := Heads
-    else TossCoin := tails
-End;
- 
-Procedure PutToss(toss: CoinToss);
-{ Outputs heads or tails as a letter }
-Begin
-    if toss = heads then write('H')
-    else write('T')
-End;
- 
-Function GetToss: CoinToss;
-{ Reads H or T from the keyboard in either lettercase }
-var c: char;
-Begin
-    { Keep reading characters until we get an appropriate letter }
-    repeat read(c) until c in ['H', 'h', 'T', 't'];
-    { Interpret the letter }
-    if c in ['H', 'h'] then GetToss := heads
-    else GetToss := tails
-End;
- 
-Procedure ShowSequence(tosses: Sequence);
-{ Outputs three coin tosses at once }
-Var
-    i: integer;
-Begin
-    for i := 1 to 3 do PutToss(tosses[i])
-End;
- 
-Procedure ReadSequence(var tosses: Sequence);
-{ Accepts three coin tosses from the keyboard }
-Var i: integer;
-Begin
-    { Get the 3 letters }
-    for i := 1 to 3 do tosses[i] := GetToss;
-    { Ignore the rest of the line }
-    readln
-End;
- 
-Function Optimum(opponent: Sequence): Sequence;
-{ Generates the optimum sequence against an opponent }
-Begin
-    case opponent[2] of
-        heads: Optimum[1] := tails;
-        tails: Optimum[1] := heads
-    end;
-    Optimum[2] := opponent[1];
-    Optimum[3] := opponent[2]
-End;
- 
-Function RandomSequence: Sequence;
-{ Generates three random coin tosses }
-Var
-    i: integer;
-Begin
-    for i := 1 to 3 do RandomSequence[i] := TossCoin
-End;
- 
-Function Match(first, second: Sequence): Boolean;
-{ Detects whether a sequence of tosses matches another }
-Var
-    different: boolean;
-    i: integer;
-Begin
-    different := false;
-    i := 1;
-    while (i <= 3) and not different do begin
-        if not (first[i] = second[i]) then different := true;
-        i := i + 1
-    end;
-    Match := not different
-End;
- 
-Procedure PlayRound(var human, computer: Player);
-{ Shows coin tosses and announces the winner }
-Var
-    { We only ever need to store the 3 most recent tosses in memory. }
-    tosses: Sequence;
-Begin
-    { Start with the first three tosses }
-    write('Tossing the coin: ');
-    tosses := RandomSequence;
-    ShowSequence(tosses);
-    { Keep tossing the coin until there is a winner. }
-    while not (Match(human.bet, tosses) or Match(computer.bet, tosses)) do begin
-        tosses[1] := tosses[2];
-        tosses[2] := tosses[3];
-        tosses[3] := TossCoin;
-        PutToss(tosses[3])
-    end;
-    { Update the winner's score and announce the winner }
-    writeln;
-    writeln;
-    if Match(human.bet, tosses) then begin
-        writeln('Congratulations! You won this round.');
-        human.score := human.score + 1;
-        writeln('Your new score is ', human.score, '.')
-    end
-    else begin
-        writeln('Yay, I won this round!');
-        computer.score := computer.score + 1;
-        writeln('My new score is ', computer.score, '.')
-    end
-End;
- 
-{ Main Algorithm }
+{ MAIN ALGORITHM }
  
 BEGIN
  
-    { Welcome the player }
-    writeln('Welcome to Penney''s game!');
-    writeln;
-    write('How many rounds would you like to play? ');
-    readln(Rounds);
-    writeln;
-    writeln('Ok, let''s play ', Rounds, ' rounds.');
+    { WELCOME THE PLAYER }
+    WRITELN('WELCOME TO PENNEY''S GAME!');
+    WRITELN;
+    WRITE('HOW MANY ROUNDS WOULD YOU LIKE TO PLAY? ');
+    READLN(ROUNDS);
+    WRITELN;
+    WRITELN('OK, LET''S PLAY ', ROUNDS, ' ROUNDS.');
  
-    { Start the game }
-    randomize;
-    Human.score := 0;
-    Computer.score := 0;
+    { START THE GAME }
+    RANDOMIZE;
+    HUMAN.SCORE := 0;
+    COMPUTER.SCORE := 0;
  
-    for Count := 1 to Rounds do begin
+    FOR COUNT := 1 TO ROUNDS DO BEGIN
  
-        writeln;
-        writeln('*** Round #', Count, ' ***');
-        writeln;
+        WRITELN;
+        WRITELN('*** ROUND #', COUNT, ' ***');
+        WRITELN;
  
-        { Choose someone randomly to pick the first sequence }
-        if TossCoin = heads then begin
-            write('I''ll pick first this time.');
-            Computer.bet := RandomSequence;
-            write(' My sequence is ');
-            ShowSequence(Computer.bet);
-            writeln('.');
-            repeat
-                write('What sequence do you want? ');
-                ReadSequence(Human.bet);
-                if Match(Human.bet, Computer.bet) then
-                    writeln('Hey, that''s my sequence! Think for yourself!')
-            until not Match(Human.bet, Computer.bet);
-            ShowSequence(Human.bet);
-            writeln(', huh? Sounds ok to me.')
-        end
-        else begin
-            write('You pick first this time. Enter 3 letters H or T: ');
-            ReadSequence(Human.bet);
-            Computer.bet := Optimum(Human.bet);
-            write('Ok, so you picked ');
-            ShowSequence(Human.bet);
-            writeln;
-            write('My sequence will be ');
-            ShowSequence(Computer.bet);
-            writeln
-        end;
+        { CHOOSE SOMEONE RANDOMLY TO PICK THE FIRST SEQUENCE }
+        IF TOSSCOIN = HEADS THEN BEGIN
+            WRITE('I''LL PICK FIRST THIS TIME.');
+            COMPUTER.BET := RANDOMSEQUENCE;
+            WRITE(' MY SEQUENCE IS ');
+            SHOWSEQUENCE(COMPUTER.BET);
+            WRITELN('.');
+            REPEAT
+                WRITE('WHAT SEQUENCE DO YOU WANT? ');
+                READSEQUENCE(HUMAN.BET);
+                IF MATCH(HUMAN.BET, COMPUTER.BET) THEN
+                    WRITELN('HEY, THAT''S MY SEQUENCE! THINK FOR YOURSELF!')
+            UNTIL NOT MATCH(HUMAN.BET, COMPUTER.BET);
+            SHOWSEQUENCE(HUMAN.BET);
+            WRITELN(', HUH? SOUNDS OK TO ME.')
+        END
+        ELSE BEGIN
+            WRITE('YOU PICK FIRST THIS TIME. ENTER 3 LETTERS H OR T: ');
+            READSEQUENCE(HUMAN.BET);
+            COMPUTER.BET := OPTIMUM(HUMAN.BET);
+            WRITE('OK, SO YOU PICKED ');
+            SHOWSEQUENCE(HUMAN.BET);
+            WRITELN;
+            WRITE('MY SEQUENCE WILL BE ');
+            SHOWSEQUENCE(COMPUTER.BET);
+            WRITELN
+        END;
  
-        { Then we can actually play the round }
-        writeln('Let''s go!');
-        writeln;
-        PlayRound(Human, Computer);
-        writeln;
-        writeln('Press ENTER to go on...');
-        readln
+        { THEN WE CAN ACTUALLY PLAY THE ROUND }
+        WRITELN('LET''S GO!');
+        WRITELN;
+        PLAYROUND(HUMAN, COMPUTER);
+        WRITELN;
+        WRITELN('PRESS ENTER TO GO ON...');
+        READLN
  
-    end;
+    END;
  
-    { All the rounds are finished; time to decide who won }
-    writeln;
-    writeln('*** End Result ***');
-    writeln;
-    if Human.score > Computer.score then writeln('Congratulations! You won!')
-    else if Computer.score > Human.score then writeln('Hooray! I won')
-    else writeln('Cool, we tied.');
-    writeln;
-    writeln('Press ENTER to finish.');
-    readln
+    { ALL THE ROUNDS ARE FINISHED; TIME TO DECIDE WHO WON }
+    WRITELN;
+    WRITELN('*** END RESULT ***');
+    WRITELN;
+    IF HUMAN.SCORE > COMPUTER.SCORE THEN WRITELN('CONGRATULATIONS! YOU WON!')
+    ELSE IF COMPUTER.SCORE > HUMAN.SCORE THEN WRITELN('HOORAY! I WON')
+    ELSE WRITELN('COOL, WE TIED.');
+    WRITELN;
+    WRITELN('PRESS ENTER TO FINISH.');
+    READLN
  
 END.
 

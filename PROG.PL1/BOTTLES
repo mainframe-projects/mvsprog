@@ -1,23 +1,33 @@
-/* And here is the PL/I version: */
+//LKED   EXEC  PGM=IEWL,PARM='XREF,LIST',REGION=96K                     09000001
+//SYSLIB   DD  DSNAME=SYS1.PL1LIB,DISP=SHR                              18000001
+//SYSLMOD  DD  DSNAME=&&GOSET(GO),DISP=(MOD,PASS),                     *27000001
+//             UNIT=SYSDA,SPACE=(1024,(50,20,1),RLSE)                   36000001
+//SYSUT1   DD  DSNAME=&&SYSUT1,UNIT=SYSDA,SPACE=(1024,(200,20)),       *45000001
+//             SEP=(SYSLMOD,SYSLIB),DCB=BLKSIZE=1024                    54000019
+//SYSPRINT DD  SYSOUT=A                                                 63000001
+//SYSLIN   DD  DDNAME=SYSIN                                             72000001
+//GO     EXEC  PGM=*.LKED.SYSLMOD,COND=(9,LT,LKED)                      81000001
+//SYSPRINT DD  SYSOUT=A                                                 90000001
+        /* And here is the PL/I version: */
 
- BOTTLES: PROC OPTIONS(MAIN);
+         BOTTLES: PROC OPTIONS(MAIN);
 
-   DCL NUM_BOT FIXED DEC(3);
-   DCL PHRASE1 CHAR(100) VAR;
-   DCL PHRASE2 CHAR(100) VAR;
-   DCL PHRASE3 CHAR(100) VAR;
+           DCL NUM_BOT FIXED DEC(3);
+           DCL PHRASE1 CHAR(100) VAR;
+           DCL PHRASE2 CHAR(100) VAR;
+           DCL PHRASE3 CHAR(100) VAR;
 
-   DO NUM_BOT = 100 TO 1 BY -1;
+           DO NUM_BOT = 100 TO 1 BY -1;
 
-      PHRASE1 = NUM_BOT||' Bottles of Beer on the wall,';
-      PHRASE2 = NUM_BOT||' Bottles of Beer';
-      PHRASE3 = 'Take one down and pass it around';
-      DISPLAY(PHRASE1||PHRASE2);
-      DISPLAY(PHRASE3);
-   END;
-   PHRASE1 = 'No more Bottles of Beer on the wall, ';
-   PHRASE2 = 'No more Bottles of Beer';
-   PHRASE3 = 'Go to the store and buy some more';
-   DISPLAY(PHRASE1||PHRASE2);
-   DISPLAY(PHRASE3);
- END BOTTLES;
+              PHRASE1 = NUM_BOT||' Bottles of Beer on the wall,';
+              PHRASE2 = NUM_BOT||' Bottles of Beer';
+              PHRASE3 = 'Take one down and pass it around';
+              DISPLAY(PHRASE1||PHRASE2);
+              DISPLAY(PHRASE3);
+           END;
+           PHRASE1 = 'No more Bottles of Beer on the wall, ';
+           PHRASE2 = 'No more Bottles of Beer';
+           PHRASE3 = 'Go to the store and buy some more';
+           DISPLAY(PHRASE1||PHRASE2);
+           DISPLAY(PHRASE3);
+         END BOTTLES;

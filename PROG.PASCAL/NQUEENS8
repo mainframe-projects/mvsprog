@@ -1,48 +1,60 @@
-program eightqueen1(output);
+//PASC   JOB '8QUEENS', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        PROGRAM EIGHTQUEEN1(OUTPUT);
 
-{ Author:  Niklaus Wirth in 1976 }
- 
-var i : integer; q : boolean;
-    a : array[ 1 .. 8] of boolean;
-    b : array[ 2 .. 16] of boolean;
-    c : array[ −7 .. 7] of boolean;
-    x : array[ 1 .. 8] of integer;
- 
-procedure try( i : integer; var q : boolean);
-    var j : integer;
-    begin 
-    j := 0;
-    repeat 
-        j := j + 1; 
-        q := false;
-        if a[ j] and b[ i + j] and c[ i − j] then
-            begin 
-            x[ i    ] := j;
-            a[ j    ] := false; 
-            b[ i + j] := false; 
-            c[ i − j] := false;
-            if i < 8 then
-                begin
-                try( i + 1, q);
-                if not q then
-                    begin 
-                    a[ j] := true; 
-                    b[ i + j] := true; 
-                    c[ i − j] := true;
-                    end
-                end 
-            else 
-                q := true
-            end
-    until q or (j = 8);
-    end;
- 
-begin
-for i :=  1 to  8 do a[ i] := true;
-for i :=  2 to 16 do b[ i] := true;
-for i := −7 to  7 do c[ i] := true;
-try( 1, q);
-if q then
-    for i := 1 to 8 do write( x[ i]:4);
-writeln
-end.
+        { AUTHOR:  NIKLAUS WIRTH IN 1976 }
+         
+        VAR I : INTEGER; Q : BOOLEAN;
+            A : ARRAY[ 1 .. 8] OF BOOLEAN;
+            B : ARRAY[ 2 .. 16] OF BOOLEAN;
+            C : ARRAY[ −7 .. 7] OF BOOLEAN;
+            X : ARRAY[ 1 .. 8] OF INTEGER;
+         
+        PROCEDURE TRY( I : INTEGER; VAR Q : BOOLEAN);
+            VAR J : INTEGER;
+            BEGIN 
+            J := 0;
+            REPEAT 
+                J := J + 1; 
+                Q := FALSE;
+                IF A[ J] AND B[ I + J] AND C[ I − J] THEN
+                    BEGIN 
+                    X[ I    ] := J;
+                    A[ J    ] := FALSE; 
+                    B[ I + J] := FALSE; 
+                    C[ I − J] := FALSE;
+                    IF I < 8 THEN
+                        BEGIN
+                        TRY( I + 1, Q);
+                        IF NOT Q THEN
+                            BEGIN 
+                            A[ J] := TRUE; 
+                            B[ I + J] := TRUE; 
+                            C[ I − J] := TRUE;
+                            END
+                        END 
+                    ELSE 
+                        Q := TRUE
+                    END
+            UNTIL Q OR (J = 8);
+            END;
+         
+        BEGIN
+        FOR I :=  1 TO  8 DO A[ I] := TRUE;
+        FOR I :=  2 TO 16 DO B[ I] := TRUE;
+        FOR I := −7 TO  7 DO C[ I] := TRUE;
+        TRY( 1, Q);
+        IF Q THEN
+            FOR I := 1 TO 8 DO WRITE( X[ I]:4);
+        WRITELN
+        END.

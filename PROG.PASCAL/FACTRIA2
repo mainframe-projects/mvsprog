@@ -1,9 +1,21 @@
-function factorial(n: integer): integer;
- begin
-  if n = 0
-   then
-    factorial := 1
-   else
-    factorial := n*factorial(n-1)
- end;
+//PASC   JOB 'FACTORIAL', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        FUNCTION FACTORIAL(N: INTEGER): INTEGER;
+         BEGIN
+          IF N = 0
+           THEN
+            FACTORIAL := 1
+           ELSE
+            FACTORIAL := N*FACTORIAL(N-1)
+         END;
 

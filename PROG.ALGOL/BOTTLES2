@@ -1,18 +1,39 @@
-# 99 Bottles of Beer                         #
-# by Otto Stolz <Otto.Stolz@Uni-Konstanz.de> #
-( PROC width = (INT x) INT: (x>9 | 2 | 1)
-; FOR i FROM 99 BY -1 TO 1
-  DO  printf ( ( $ 2l n(width(i))d
-                 , x "bottle" b("","s") x "of beer on the wall,"
-                 , x n(width(i))d
-                 , x "bottle" b("","s") x "of beer."
-                 , l "Take one down, pass it around,"
-                 , x n(width(i-1))d
-                 , x "bottle" b("","s") x "of beer."
-                 $
-               , i  , i=1
-               , i  , i=1
-               , i-1, i=2
-             ) )
-  OD
-)
+# //ALGOL EXEC PGM=ALGOL,REGION=48K                                       00020000
+//SYSPRINT DD SYSOUT=A                                                  00040000
+//SYSPUNCH DD SYSOUT=B                                                  00060000
+//SYSLIN DD DSN=&LOADSET,UNIT=SYSSQ,SEP=SYSPUNCH,SPACE=(3600,(10,4)),  *00080000
+//          DISP=(MOD,PASS)                                             00100000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSSQ,SEP=SYSPRINT,SPACE=(1024,(50,10))    00120000
+//SYSUT2 DD DSN=&SYSUT2,UNIT=SYSSQ,SEP=SYSUT1,SPACE=(1024,(50,10))      00140000
+//SYSUT3 DD DSN=&SYSUT3,UNIT=SYSDA,SPACE=(1024,(40,10))                 00160000
+//LKED EXEC PGM=IEWL,PARM='XREF,LIST,LET',COND=(5,LT,ALGOL),REGION=96K  00180000
+//SYSPRINT DD SYSOUT=A                                                  00200000
+//SYSLIN DD DSN=&LOADSET,DISP=(OLD,DELETE)                              00220000
+//       DD DDNAME=SYSIN                                                00240000
+//SYSLIB DD DSN=SYS1.ALGLIB,DISP=SHR                                    00260000
+//SYSLMOD DD DSN=&GOSET(GO),UNIT=SYSDA,DISP=(MOD,PASS),                *00280000
+//           SPACE=(1024,(50,20,1))                                     00300000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSDA,SEP=(SYSLIB,SYSLMOD),               *00320000
+//          SPACE=(1024,(50,20))                                        00340000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((5,LT,ALGOL),(5,LT,LKED))            00360000
+//ALGLDD01 DD SYSOUT=A                                                  00380000
+//SYSPRINT DD SYSOUT=A                                                  00400000
+//SYSUT1 DD DSN=&SYSUT1,UNIT=SYSSQ,SPACE=(1024,(20,10))                 00420000
+        # 99 Bottles of Beer                         #
+        # by Otto Stolz <Otto.Stolz@Uni-Konstanz.de> #
+        ( PROC WIDTH = (INT X) INT: (X>9 | 2 | 1)
+        ; FOR I FROM 99 BY -1 TO 1
+          DO  PRINTF ( ( $ 2L N(WIDTH(I))D
+                         , X "BOTTLE" B("","S") X "OF BEER ON THE WALL,"
+                         , X N(WIDTH(I))D
+                         , X "BOTTLE" B("","S") X "OF BEER."
+                         , L "TAKE ONE DOWN, PASS IT AROUND,"
+                         , X N(WIDTH(I-1))D
+                         , X "BOTTLE" B("","S") X "OF BEER."
+                         $
+                       , I  , I=1
+                       , I  , I=1
+                       , I-1, I=2
+                     ) )
+          OD
+        )

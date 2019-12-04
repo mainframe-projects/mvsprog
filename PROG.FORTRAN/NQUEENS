@@ -1,57 +1,75 @@
-C This one implements depth-first backtracking.
-C See the 2nd program for Scheme on the "Permutations" page for the
-C main idea.
-C As is, the program only prints the number of n-queens configurations.
-C To print also the configurations, uncomment the line after label 80.
-      program queens
-      implicit integer(a-z)
-      parameter(l=18)
-      dimension a(l),s(l),u(4*l-2)
-      do 10 i=1,l
-   10 a(i)=i
-      do 20 i=1,4*l-2
-   20 u(i)=0
-      do 110 n=1,l
-      m=0
-      i=1
-      r=2*n-1
-      go to 40
-   30 s(i)=j
-      u(p)=1
-      u(q+r)=1
-      i=i+1
-   40 if(i.gt.n) go to 80
-      j=i
-   50 z=a(i)
-      y=a(j)
-      p=i-y+n
-      q=i+y-1
-      a(i)=y
-      a(j)=z
-      if((u(p).eq.0).and.(u(q+r).eq.0)) goto 30
-   60 j=j+1
-      if(j.le.n) go to 50
-   70 j=j-1
-      if(j.eq.i) go to 90
-      z=a(i)
-      a(i)=a(j)
-      a(j)=z
-      go to 70
-   80 m=m+1
-C     print *,(a(k),k=1,n)
-   90 i=i-1
-      if(i.eq.0) go to 100
-      p=i-a(i)+n
-      q=i+a(i)-1
-      j=s(i)
-      u(p)=0
-      u(q+r)=0
-      go to 60
-  100 print *,n,m
-  110 continue
-      end
- 
-C Output
+//FORT     EXEC PGM=IEYFORT,REGION=100K                                 00020000
+//SYSPRINT DD  SYSOUT=A                                                 00040000
+//SYSPUNCH DD  SYSOUT=B                                                 00060000
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(MOD,PASS),UNIT=SYSSQ,             X00080000
+//             SPACE=(80,(200,100),RLSE),DCB=BLKSIZE=80                 00100014
+//LKED EXEC PGM=IEWL,REGION=96K,PARM=(XREF,LET,LIST),COND=(4,LT,FORT)   00120000
+//SYSLIB   DD  DSNAME=SYS1.FORTLIB,DISP=SHR                             00140000
+//SYSLMOD  DD  DSNAME=&GOSET(MAIN),DISP=(NEW,PASS),UNIT=SYSDA,         X00160000
+//             SPACE=(1024,(20,10,1),RLSE),DCB=BLKSIZE=1024             00180014
+//SYSPRINT DD  SYSOUT=A                                                 00200000
+//SYSUT1   DD  UNIT=SYSDA,SPACE=(1024,(100,10),RLSE),DCB=BLKSIZE=1024, X00210018
+//             DSNAME=&SYSUT1                                           00220018
+//SYSLIN   DD  DSNAME=&LOADSET,DISP=(OLD,DELETE)                        00240000
+//         DD  DDNAME=SYSIN                                             00260000
+//GO EXEC PGM=*.LKED.SYSLMOD,COND=((4,LT,FORT),(4,LT,LKED))             00280000
+//FT05F001 DD  DDNAME=SYSIN                                             00300000
+//FT06F001 DD  SYSOUT=A                                                 00320000
+//FT07F001 DD  SYSOUT=B
+C THIS ONE IMPLEMENTS DEPTH-FIRST BACKTRACKING.
+C SEE THE 2ND PROGRAM FOR SCHEME ON THE "PERMUTATIONS" PAGE FOR THE
+C MAIN IDEA.
+C AS IS, THE PROGRAM ONLY PRINTS THE NUMBER OF N-QUEENS CONFIGURATIONS.
+C TO PRINT ALSO THE CONFIGURATIONS, UNCOMMENT THE LINE AFTER LABEL 80.
+        PROGRAM QUEENS
+        IMPLICIT INTEGER(A-Z)
+        PARAMETER(L=18)
+        DIMENSION A(L),S(L),U(4*L-2)
+        DO 10 I=1,L
+10      A(I)=I
+        DO 20 I=1,4*L-2
+20      U(I)=0
+        DO 110 N=1,L
+        M=0
+        I=1
+        R=2*N-1
+        GO TO 40
+30      S(I)=J
+        U(P)=1
+        U(Q+R)=1
+        I=I+1
+40      IF(I.GT.N) GO TO 80
+        J=I
+50      Z=A(I)
+        Y=A(J)
+        P=I-Y+N
+        Q=I+Y-1
+        A(I)=Y
+        A(J)=Z
+        IF((U(P).EQ.0).AND.(U(Q+R).EQ.0)) GOTO 30
+60      J=J+1
+        IF(J.LE.N) GO TO 50
+70      J=J-1
+        IF(J.EQ.I) GO TO 90
+        Z=A(I)
+        A(I)=A(J)
+        A(J)=Z
+        GO TO 70
+80      M=M+1
+        C     PRINT *,(A(K),K=1,N)
+90      I=I-1
+        IF(I.EQ.0) GO TO 100
+        P=I-A(I)+N
+        Q=I+A(I)-1
+        J=S(I)
+        U(P)=0
+        U(Q+R)=0
+        GO TO 60
+100     PRINT *,N,M
+110     CONTINUE
+        END
+
+C OUTPUT
 C          1           1
 C          2           0
 C          3           0

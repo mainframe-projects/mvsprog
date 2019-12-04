@@ -1,16 +1,29 @@
-begin
-    integer i;
-    for i := 1 step 1 until 100 do
-    begin
-        boolean fizzed;
-        fizzed := 0 = mod(i, 3);
-        if fizzed then
-            outtext("Fizz");
-        if mod(i, 5) = 0 then
-            outtext("Buzz")
-        else if not fizzed then
-            outint(i, 3);
-        outimage
-    end;
-end
+//SIMU  JOB 'FIZZBUZZ'
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1000K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC SIMCLG,
+//      PARM.SIM='',
+//      PARM.LKED='MAP,LIST,LET',
+//      PARM.GO='LINECNT=64'
+//SIM.SYSIN DD *
+/*
+//GO.SYSOUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        BEGIN
+            INTEGER I;
+            FOR I := 1 STEP 1 UNTIL 100 DO
+            BEGIN
+                BOOLEAN FIZZED;
+                FIZZED := 0 = MOD(I, 3);
+                IF FIZZED THEN
+                    OUTTEXT("FIZZ");
+                IF MOD(I, 5) = 0 THEN
+                    OUTTEXT("BUZZ")
+                ELSE IF NOT FIZZED THEN
+                    OUTINT(I, 3);
+                OUTIMAGE
+            END;
+        END
 

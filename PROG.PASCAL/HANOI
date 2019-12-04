@@ -1,26 +1,38 @@
-program Hanoi;
-type
-  TPole = (tpLeft, tpCenter, tpRight);
-const
-  strPole:array[TPole] of string[6]=('left','center','right');
- 
- procedure MoveOneDisk(const DiskNum:integer; const Origin,Destination:TPole);
- begin
-  Writeln('Move disk ',DiskNum,' from ',strPole[Origin],' to ',strPole[Destination]);
- end;
- 
- procedure MoveStack (const Ndisks : integer; const Origin,Destination,Auxiliary:TPole);
- begin
-  if Ndisks =1 then
-       MoveOneDisk(1,origin,Destination)
-  else begin
-       MoveStack(Ndisks - 1, Origin,Auxiliary, Destination );
-       MoveOneDisk(Ndisks,origin,Destination);
-       MoveStack(Ndisks - 1, Auxiliary, Destination, origin);
-  end;
- end;
- 
-begin
- MoveStack(4,tpLeft,tpCenter,tpRight);
-end.
+//PASC   JOB 'HANOI', 
+//      CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1),
+//      REGION=1024K,TIME=(1,0),PRTY=8
+/*JOBPARM  ROOM=4242
+//CLG EXEC PASCLG,GOTIME=3600,GOREG=1024K,
+//      OPT='M+',
+//      GOPARM='/STACK=512k'
+//COMPILE.SYSIN DD *
+/*
+//GO.OUTPUT DD SYSOUT=*,OUTLIM=${OUTLIM:-5000}
+//GO.SYSIN DD *
+/*
+        PROGRAM HANOI;
+        TYPE
+          TPOLE = (TPLEFT, TPCENTER, TPRIGHT);
+        CONST
+          STRPOLE:ARRAY[TPOLE] OF STRING[6]=('LEFT','CENTER','RIGHT');
+         
+         PROCEDURE MOVEONEDISK(CONST DISKNUM:INTEGER; CONST ORIGIN,DESTINATION:TPOLE);
+         BEGIN
+          WRITELN('MOVE DISK ',DISKNUM,' FROM ',STRPOLE[ORIGIN],' TO ',STRPOLE[DESTINATION]);
+         END;
+         
+         PROCEDURE MOVESTACK (CONST NDISKS : INTEGER; CONST ORIGIN,DESTINATION,AUXILIARY:TPOLE);
+         BEGIN
+          IF NDISKS =1 THEN
+               MOVEONEDISK(1,ORIGIN,DESTINATION)
+          ELSE BEGIN
+               MOVESTACK(NDISKS - 1, ORIGIN,AUXILIARY, DESTINATION );
+               MOVEONEDISK(NDISKS,ORIGIN,DESTINATION);
+               MOVESTACK(NDISKS - 1, AUXILIARY, DESTINATION, ORIGIN);
+          END;
+         END;
+         
+        BEGIN
+         MOVESTACK(4,TPLEFT,TPCENTER,TPRIGHT);
+        END.
 

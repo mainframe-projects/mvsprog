@@ -1,68 +1,77 @@
-/*REXX program plays/simulates  Penney's Game,  a  two-player  coin toss sequence game. */
-__=copies('─',9)                                 /*literal for eyecatching fence.       */
-signal on halt                                   /*a clean way out if  CLBF  quits.     */
-parse arg # seed .                               /*obtain optional arguments from the CL*/
-if #==''  | #==","     then #=3                  /*Not specified?  Then use the default.*/
-if datatype(seed,'W')  then call random ,,seed   /*use seed for RANDOM #s repeatability.*/
-wins=0;    do games=1                            /*simulate a number of Penney's games. */
-           call game                             /*simulate a single inning of a game.  */
-           end   /*games*/                       /*keep at it until  QUIT  or  halt.    */
-exit                                             /*stick a fork in it,  we're all done. */
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-halt:  say;   say __  "Penney's Game was halted.";   say;   exit 13
-r:     arg ,$;       do  arg(1);    $=$ || random(0,1);   end;          return $
-s:     if arg(1)==1  then return arg(3);   return word(arg(2) 's',1)       /*pluralizer.*/
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-game:  @.=;  tosses=@.                                 /*the coin toss sequence so far. */
-       toss1=r(1)                                      /*result:   0=computer,   1=CBLF.*/
-       if \toss1  then call randComp                   /*maybe let the computer go first*/
-       if  toss1  then say __ "You win the first toss, so you pick your sequence first."
-                  else say __ "The computer won first toss, the pick was: "    @.comp
-                       call prompter                   /*get the human's guess from C.L.*/
-                       call randComp                   /*get computer's guess if needed.*/
-                                                       /*CBLF:  carbon-based life form. */
-       say __  "      your pick:"  @.CBLF              /*echo human's pick to terminal. */
-       say __  "computer's pick:"  @.comp              /*  "  comp.'s   "   "     "     */
-       say                                             /* [↓]  flip the coin 'til a win.*/
-             do  flips=1  until pos(@.CBLF,tosses)\==0  |  pos(@.comp,tosses)\==0
-             tosses=tosses || translate(r(1),'HT',10)
-             end   /*flips*/                           /* [↑]   this is a flipping coin,*/
-                                                       /* [↓] series of tosses*/
-       say __ "The tossed coin series was: "   tosses
-       say
-       @@@="won this toss with "   flips   ' coin tosses.'
-       if pos(@.CBLF,tosses)\==0  then do;  say __  "You"  @@@;  wins=wins+1;  end
-                                  else      say __  "The computer"  @@@
-       _=wins;  if _==0  then _='no'
-       say __ "You've won"  _  "game"s(wins)  'out of ' games"."
-       say;  say copies('╩╦',79%2)'╩';  say
-       return
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-prompter: oops=__ 'Oops!  ';            a=             /*define some handy REXX literals*/
-          @a_z='ABCDEFG-IJKLMNOPQRS+UVWXYZ'            /*the extraneous alphabetic chars*/
-          p=__ 'Pick a sequence of'  #  "coin tosses of  H or T (Heads or Tails) or Quit:"
-             do  until  ok;   say;  say p;  pull a     /*uppercase the answer.          */
-             if abbrev('QUIT',a,1)  then exit 1        /*the human wants to  quit.      */
-             a=space(translate(a,,@a_z',./\;:_'),0)    /*elide extraneous characters.   */
-             b=translate(a,10,'HT');    L=length(a)    /*translate ───► bin; get length.*/
-             ok=0                                      /*the response is  OK  (so far). */
-                 select                                /*verify the user response.      */
-                 when \datatype(b,'B') then say oops "Illegal response."
-                 when \datatype(a,'M') then say oops "Illegal characters in response."
-                 when L==0             then say oops "No choice was given."
-                 when L<#              then say oops "Not enough coin choices."
-                 when L>#              then say oops "Too many coin choices."
-                 when a==@.comp        then say oops "You can't choose the computer's choice: " @.comp
-                 otherwise         ok=1
-                 end   /*select*/
-             end       /*until ok*/
-          @.CBLF=a;           @.CBLF!=b                /*we have the human's guess now. */
-          return
-/*──────────────────────────────────────────────────────────────────────────────────────*/
-randComp: if @.comp\==''  then return                  /*the computer already has a pick*/
-          _=@.CBLF!                                    /* [↓] use best-choice algorithm.*/
-          if _\==''  then g=left((\substr(_, min(2, #), 1))left(_, 1)substr(_, 3), #)
-            do  until g\==@.CBLF!;   g=r(#);   end     /*otherwise, generate a choice.  */
-          @.comp=translate(g, 'HT', 10)
-          return
+//BRXGEN   JOB CLASS=C,REGION=0K
+//IDCAMS   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+  DEFINE ALIAS (NAME(BREXX) RELATE(SYS1.UCAT.TSO)) -
+         CATALOG(SYS1.VMASTCAT/SECRET)
+  SET MAXCC=0
+/*
+//
+        /*REXX PROGRAM PLAYS/SIMULATES  PENNEY'S GAME,  A  TWO-PLAYER  COIN TOSS SEQUENCE GAME. */
+        __=COPIES('─',9)                                 /*LITERAL FOR EYECATCHING FENCE.       */
+        SIGNAL ON HALT                                   /*A CLEAN WAY OUT IF  CLBF  QUITS.     */
+        PARSE ARG # SEED .                               /*OBTAIN OPTIONAL ARGUMENTS FROM THE CL*/
+        IF #==''  | #==","     THEN #=3                  /*NOT SPECIFIED?  THEN USE THE DEFAULT.*/
+        IF DATATYPE(SEED,'W')  THEN CALL RANDOM ,,SEED   /*USE SEED FOR RANDOM #S REPEATABILITY.*/
+        WINS=0;    DO GAMES=1                            /*SIMULATE A NUMBER OF PENNEY'S GAMES. */
+                   CALL GAME                             /*SIMULATE A SINGLE INNING OF A GAME.  */
+                   END   /*GAMES*/                       /*KEEP AT IT UNTIL  QUIT  OR  HALT.    */
+        EXIT                                             /*STICK A FORK IN IT,  WE'RE ALL DONE. */
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        HALT:  SAY;   SAY __  "PENNEY'S GAME WAS HALTED.";   SAY;   EXIT 13
+        R:     ARG ,$;       DO  ARG(1);    $=$ || RANDOM(0,1);   END;          RETURN $
+        S:     IF ARG(1)==1  THEN RETURN ARG(3);   RETURN WORD(ARG(2) 'S',1)       /*PLURALIZER.*/
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        GAME:  @.=;  TOSSES=@.                                 /*THE COIN TOSS SEQUENCE SO FAR. */
+               TOSS1=R(1)                                      /*RESULT:   0=COMPUTER,   1=CBLF.*/
+               IF \TOSS1  THEN CALL RANDCOMP                   /*MAYBE LET THE COMPUTER GO FIRST*/
+               IF  TOSS1  THEN SAY __ "YOU WIN THE FIRST TOSS, SO YOU PICK YOUR SEQUENCE FIRST."
+                          ELSE SAY __ "THE COMPUTER WON FIRST TOSS, THE PICK WAS: "    @.COMP
+                               CALL PROMPTER                   /*GET THE HUMAN'S GUESS FROM C.L.*/
+                               CALL RANDCOMP                   /*GET COMPUTER'S GUESS IF NEEDED.*/
+                                                               /*CBLF:  CARBON-BASED LIFE FORM. */
+               SAY __  "      YOUR PICK:"  @.CBLF              /*ECHO HUMAN'S PICK TO TERMINAL. */
+               SAY __  "COMPUTER'S PICK:"  @.COMP              /*  "  COMP.'S   "   "     "     */
+               SAY                                             /* [↓]  FLIP THE COIN 'TIL A WIN.*/
+                     DO  FLIPS=1  UNTIL POS(@.CBLF,TOSSES)\==0  |  POS(@.COMP,TOSSES)\==0
+                     TOSSES=TOSSES || TRANSLATE(R(1),'HT',10)
+                     END   /*FLIPS*/                           /* [↑]   THIS IS A FLIPPING COIN,*/
+                                                               /* [↓] SERIES OF TOSSES*/
+               SAY __ "THE TOSSED COIN SERIES WAS: "   TOSSES
+               SAY
+               @@@="WON THIS TOSS WITH "   FLIPS   ' COIN TOSSES.'
+               IF POS(@.CBLF,TOSSES)\==0  THEN DO;  SAY __  "YOU"  @@@;  WINS=WINS+1;  END
+                                          ELSE      SAY __  "THE COMPUTER"  @@@
+               _=WINS;  IF _==0  THEN _='NO'
+               SAY __ "YOU'VE WON"  _  "GAME"S(WINS)  'OUT OF ' GAMES"."
+               SAY;  SAY COPIES('╩╦',79%2)'╩';  SAY
+               RETURN
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        PROMPTER: OOPS=__ 'OOPS!  ';            A=             /*DEFINE SOME HANDY REXX LITERALS*/
+                  @A_Z='ABCDEFG-IJKLMNOPQRS+UVWXYZ'            /*THE EXTRANEOUS ALPHABETIC CHARS*/
+                  P=__ 'PICK A SEQUENCE OF'  #  "COIN TOSSES OF  H OR T (HEADS OR TAILS) OR QUIT:"
+                     DO  UNTIL  OK;   SAY;  SAY P;  PULL A     /*UPPERCASE THE ANSWER.          */
+                     IF ABBREV('QUIT',A,1)  THEN EXIT 1        /*THE HUMAN WANTS TO  QUIT.      */
+                     A=SPACE(TRANSLATE(A,,@A_Z',./\;:_'),0)    /*ELIDE EXTRANEOUS CHARACTERS.   */
+                     B=TRANSLATE(A,10,'HT');    L=LENGTH(A)    /*TRANSLATE ───► BIN; GET LENGTH.*/
+                     OK=0                                      /*THE RESPONSE IS  OK  (SO FAR). */
+                         SELECT                                /*VERIFY THE USER RESPONSE.      */
+                         WHEN \DATATYPE(B,'B') THEN SAY OOPS "ILLEGAL RESPONSE."
+                         WHEN \DATATYPE(A,'M') THEN SAY OOPS "ILLEGAL CHARACTERS IN RESPONSE."
+                         WHEN L==0             THEN SAY OOPS "NO CHOICE WAS GIVEN."
+                         WHEN L<#              THEN SAY OOPS "NOT ENOUGH COIN CHOICES."
+                         WHEN L>#              THEN SAY OOPS "TOO MANY COIN CHOICES."
+                         WHEN A==@.COMP        THEN SAY OOPS "YOU CAN'T CHOOSE THE COMPUTER'S CHOICE: " @.COMP
+                         OTHERWISE         OK=1
+                         END   /*SELECT*/
+                     END       /*UNTIL OK*/
+                  @.CBLF=A;           @.CBLF!=B                /*WE HAVE THE HUMAN'S GUESS NOW. */
+                  RETURN
+        /*──────────────────────────────────────────────────────────────────────────────────────*/
+        RANDCOMP: IF @.COMP\==''  THEN RETURN                  /*THE COMPUTER ALREADY HAS A PICK*/
+                  _=@.CBLF!                                    /* [↓] USE BEST-CHOICE ALGORITHM.*/
+                  IF _\==''  THEN G=LEFT((\SUBSTR(_, MIN(2, #), 1))LEFT(_, 1)SUBSTR(_, 3), #)
+                    DO  UNTIL G\==@.CBLF!;   G=R(#);   END     /*OTHERWISE, GENERATE A CHOICE.  */
+                  @.COMP=TRANSLATE(G, 'HT', 10)
+                  RETURN
 
