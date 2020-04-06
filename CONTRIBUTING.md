@@ -8,7 +8,7 @@ We welcome new problems/exercises and also solutions.
 
 The recommended way to contribute is as follows:
 
-1. Fork this repository 
+1. Fork this repository (https://github.com/mvs38/mvsprog)
 2. Add changes desired (see 03 and 04 below)
 3. Create a pull request
 
