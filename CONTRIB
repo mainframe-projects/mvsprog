@@ -1,10 +1,10 @@
-# CONTRIBUTING
+CONTRIBUTING
 
 Contributions are welcome to this repository 
 
 We welcome new problems/exercises and also solutions.
 
-## 01. HOW TO CONTRIBUTE
+01. HOW TO CONTRIBUTE
 
 The recommended way to contribute is as follows:
 
@@ -12,13 +12,13 @@ The recommended way to contribute is as follows:
 2. Add changes desired (see 03 and 04 below)
 3. Create a pull request
 
-## 02. FILE FORMATTING 
+02. FILE FORMATTING 
 
 This repository should contain files in ASCII format. EBCDIC translation should
 be handled by FTP upload or the use of the AWS tape that contains a dump of the
 PDS datasets.
 
-## 03. ADDING NEW PROBLEM EXERCISES
+03. ADDING NEW PROBLEM EXERCISES
 
 1. Create a simple text file (with no extension) in the PROG.QUIZ directory with
    a unique name that complies to the naming restrictions of a PDS member
@@ -28,7 +28,7 @@ PDS datasets.
 2. Add an entry listing the filename and the description to the 00README in the
    PROG.QUIZ directory.
 
-## 04. ADDING SAMPLE SOLUTIONS TO PROBLEM/EXERCISES
+04. ADDING SAMPLE SOLUTIONS TO PROBLEM/EXERCISES
 
 1. Choose the problem/exercise you wish to solve from those listed in the
    PROG.QUIZ directory
@@ -50,11 +50,11 @@ PDS datasets.
 4. Commit file changes to your forked repo and 
 
 
-## 05. HELP I'M NEW TO GITHUB
+05. HELP I'M NEW TO GITHUB
 
 
 Any issues, please raise a issue or contact me by email at mvs at
-s370.org
+quiz@s370.org
 
 
 ## 06. CORRECTIONS TO ERRORS IN PROGRAMS/JCL

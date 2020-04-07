@@ -1,0 +1,37 @@
+MVS PROGRAMMING PROBLEMS
+""""""""""""""""""""""""
+
+
+CONTRIBUTING
+
+Contributions for problems/exercises and sample solutions to the exercises are
+welcome to this repository - see CONTRIB for details
+
+
+CONTENTS
+The source code for the programs in this repository can be found at
+github.com/mvs38/mvsprog and also as a tape file at cbttape.org
+
+$README         General info about this 
+CONTRIB         How to Contribute 
+syscpk.dasd     A copy of Jay Moseley's SYSCPK JCL for easy access
+(other files)   The Sample programming problems
+
+
+
+OTHER DATASETS
+
+PROGQUIZ.ALGOL.SOURCE   Sample ALGOL/ALGOL68 solutions to problems/exercises
+PROGQUIZ.ASM.SOURCE     Sample Assemmbler solutions to problems/exercises
+PROGQUIZ.BASIC.SOURCE   Sample BASIC solutions to problems/exercises 
+PROGQUIZ.COBOL.SOURCE	  Sample COBOL solutions to problems/exercises
+PROGQUIZ.FORTRAN.SOURCE Sample FORTRAN solutions to problems/exercises
+PROGQUIZ.PASCAL.SOURCE  Sample PASCAL solutions to problems/exercises
+PROGQUIZ.PL1.SOURCE     Sample PL/1 solutions to problems/exercises
+PROGQUIZ.PL360.SOURCE   Sample PL360 solutions to problems/exercises
+PROGQUIZ.REXX.SOURCE    Sample REXX solutions to problems/exercises
+PROGQUIZ.RPG.SOURCE     Sample RPG solutions to problems/exercises
+PROGQUIZ.SIMULA.SOURCE  Sample SIMULA solutions to problems/exercises
+PROGQUIZ.SNOBOL.SOURCE  Sample SNOBOL/SPITBOL solutions to problems/exercises
+ 
+PROGQUIZ.UTIL.JCL       Sample JCL for managing these datasets
