@@ -9,14 +9,14 @@ Calculate the factorial of a given number.
 
 The factorial of 0 (zero) is defined as being 1 (unity).
 
-The Factorial Function of a positive integer, n is defined as the product of
-the sequence: n,  n-1, n-2, ... 1
+The Factorial Function of a positive integer, n is defined as the product
+of the sequence: n,  n-1, n-2, ... 1
 
 fact(n) = n* fact(n-1) ... 1
 
 Write a function to return the factorial of a number.
 
-Solutions can be iterative or recursive.  Support for trapping negative n 
+Solutions can be iterative or recursive.  Support for trapping negative n
 (n < 0) errors is optional.
 
 

@@ -4,29 +4,31 @@ LEAP YEARS
 
 PROBLEM
 
-Write a program that lists out leap years for the years between 1990 and 2110
+Write a program that lists out leap years for the years between 1990
+and 2110
 
 
 ALTERNATE PROBLEMS
 
-Write a program that does the above but for different cultural calendars (see
-Wikipedia article for ideas).
+Write a program that does the above but for different cultural calendars
+(see Wikipedia article for ideas).
 
 
 
 ALGORITHM
 
-The Gregorian reform modified the Julian calendar's scheme of leap years as follows:
+The Gregorian reform modified the Julian calendar's scheme of leap years
+as follows:
 
-Every year that is exactly divisible by four is a leap year, except for years
-that are exactly divisible by 100, but these centurial years are leap years if
-they are exactly divisible by 400. 
+Every year that is exactly divisible by four is a leap year, except for
+years that are exactly divisible by 100, but these centurial years are
+leap years if they are exactly divisible by 400.
 
-For example, the years 1700, 1800, and 1900 are not leap years, but the years
-1600 and 2000 are.
+For example, the years 1700, 1800, and 1900 are not leap years, but the
+years 1600 and 2000 are.
 
-The year variable being tested is the integer representing the number of the
-year in the Gregorian calendar.
+The year variable being tested is the integer representing the number
+of the year in the Gregorian calendar.
 
     if (year is not divisible by 4) then (it is a common year)
     else if (year is not divisible by 100) then (it is a leap year)
@@ -39,37 +41,38 @@ WIKIPEDIA
 
 A leap year (also known as an intercalary year or bissextile year) is a
 calendar year containing an additional day (or, in the case of lunisolar
-calendars, a month) added to keep the calendar year synchronized with the
-astronomical or seasonal year. Because seasons and astronomical events do not
-repeat in a whole number of days, calendars that have the same number of days
-in each year drift over time with respect to the event that the year is
-supposed to track. By inserting (also called intercalating) an additional day
-or month into the year, the drift can be corrected. A year that is not a leap
-year is called a common year.
+calendars, a month) added to keep the calendar year synchronized with
+the astronomical or seasonal year. Because seasons and astronomical
+events do not repeat in a whole number of days, calendars that have
+the same number of days in each year drift over time with respect to
+the event that the year is supposed to track. By inserting (also called
+intercalating) an additional day or month into the year, the drift can
+be corrected. A year that is not a leap year is called a common year.
 
-For example, in the Gregorian calendar, each leap year has 366 days instead of
-365, by extending February to 29 days rather than the common 28. These extra
-days occur in years which are multiples of four (with the exception of
-centennial years not divisible by 400). Similarly, in the lunisolar Hebrew
-calendar, Adar Aleph, a 13th lunar month, is added seven times every 19 years
-to the twelve lunar months in its common years to keep its calendar year from
-drifting through the seasons. In the Bahá'í Calendar, a leap day is added when
-needed to ensure that the following year begins on the vernal equinox.
+For example, in the Gregorian calendar, each leap year has 366 days
+instead of 365, by extending February to 29 days rather than the common
+28. These extra days occur in years which are multiples of four (with
+the exception of centennial years not divisible by 400). Similarly, in
+the lunisolar Hebrew calendar, Adar Aleph, a 13th lunar month, is added
+seven times every 19 years to the twelve lunar months in its common
+years to keep its calendar year from drifting through the seasons. In
+the Bahá'í Calendar, a leap day is added when needed to ensure that
+the following year begins on the vernal equinox.
 
-The name "leap year" probably comes from the fact that while a fixed date in
-the Gregorian calendar normally advances one day of the week from one year to
-the next, the day of the week in the 12 months following the leap day (from
-March 1 through February 28 of the following year) will advance two days due to
-the extra day (thus "leaping over" one of the days in the week). For example,
-Christmas Day (December 25) fell on a Tuesday in 2012, Wednesday in 2013,
-Thursday in 2014, and Friday in 2015 but then "leapt" over Saturday to fall on
-a Sunday in 2016.
+The name "leap year" probably comes from the fact that while a fixed date
+in the Gregorian calendar normally advances one day of the week from
+one year to the next, the day of the week in the 12 months following
+the leap day (from March 1 through February 28 of the following year)
+will advance two days due to the extra day (thus "leaping over" one of
+the days in the week). For example, Christmas Day (December 25) fell on
+a Tuesday in 2012, Wednesday in 2013, Thursday in 2014, and Friday in
+2015 but then "leapt" over Saturday to fall on a Sunday in 2016.
 
 The length of a day is also occasionally changed by the insertion of leap
-seconds into Coordinated Universal Time (UTC), owing to the variability of
-Earth's rotational period. Unlike leap days, leap seconds are not introduced on
-a regular schedule, since the variability in the length of the day is not
-entirely predictable.
+seconds into Coordinated Universal Time (UTC), owing to the variability
+of Earth's rotational period. Unlike leap days, leap seconds are not
+introduced on a regular schedule, since the variability in the length
+of the day is not entirely predictable.
 
 
 REFERENCES

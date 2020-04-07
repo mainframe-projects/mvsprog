@@ -1,21 +1,21 @@
-99 BOTTLES OF BEER
+99 BOTTLES OF BEER 
 """"""""""""""""""
 
 
 PROBLEM
 
-Write a program to create the lyrics of the old song "99 Bottles of Beer on the
-Wall"
+Write a program to create the lyrics of the old song "99 Bottles of Beer
+on the Wall"
 
-This problem is a very simple problem involving looping 
+This problem is a very simple problem involving looping
 
 
 
 NOTES
 
-1. You should construct your program to use bottle and not bottles when the
-count gets to 1 2. The last line of the last verse has a different text
-resetting the wall.
+1. You should construct your program to use bottle and not bottles when
+the count gets to 1 2. The last line of the last verse has a different
+text resetting the wall.
 
 
 

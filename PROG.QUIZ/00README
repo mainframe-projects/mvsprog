@@ -1,48 +1,84 @@
 
-                              PROG.QUIZ(00README)
-                              ===================
+                              PROG.QUIZ(00README) ===================
 
 
-                              GITHUB.COM REPO 
+                              GITHUB.COM REPO
 
-For ease of administering this programming dataset I have created a GITHUB
-repository at
+For ease of administering this programming dataset I have created a
+GITHUB repository at
 
         https://github.com/mvs38/mvsprog
 
-where the latest additions can be found to this programming resource. This also
-allows the option of cloning the repository and FTP'ing the files into PDS
-members on your MVS machine or just using them from the web if that is easier.
+where the latest additions can be found to this programming resource. This
+also allows the option of cloning the repository and FTP'ing the files
+into PDS members on your MVS machine or just using them from the web if
+that is easier.
 
 
 
-                              PROGQUIZ.AWS TAPE 
+                              PROGQUIZ.AWS TAPE
 
-Periodically I intend to release an AWS tape at this repository where people
-can pull down the resource in an easy fashion.
+Periodically I intend to release an AWS tape at this repository where
+people can pull down the resource in an easy fashion.
 
 
 
-                              PROGRAMMING QUIZ 
+                              PROGRAMMING QUIZ
 
-The PROG.QUIZ dataset is a set of PDS members containing various programming
-problems for the user to solve. Each file contains the following:
+The PROG.QUIZ dataset is a set of PDS members containing various
+programming problems for the user to solve. Each file contains the
+following:
 
-1. A description of the problem 
-2. Suggested approach or algorithm 
+1. A description of the problem 2. Suggested approach or algorithm
 3. Any References
 
 It is suggested that the user creates a PDS for him/herself named
-<USERNAME>.PROG.QUIZ.<LANGUAGE> with an appropriate member named after the file
-that set the problem. This enables the user to tackle the 
+<USERNAME>.PROG.QUIZ.<LANGUAGE> with an appropriate member named after the
+file that set the problem. This enables the user to tackle the problems
+without interferance from other users.
 
 
 
                               FILES IN PDS 
 
 00README    (this file) 
-COMPILER    Compilers Available on MVS (includes SYSCPK) 
-HELLO     Standard Hello World program
+COMPILR     Compilers Available on MVS (includes SYSCPK) 
+HELLO       Standard Hello World program
+
+BABBAGE     The Charles Babbage problem
+BOTTLES     99 Bottles of Beer
+BOUNCY      'Bouncy' Numbers problem
+CALCPI      Calculating Pi
+CHAMPER     Champernowne's Constant
+CHESS960    Chess960 Starting Position
+CIRPRI      Circular Primes
+COINSUMS    Coin Sums
+CONPRI      Consecutive Prime Sum
+DIGFACT     Digit Factorial Chains
+FACTRIAL    Factorial Calculation
+FIBONACI    Fibonacci Sequence Calculation
+FIZBUZ      Fizz Buzz Game
+GOLDBACH    Goldbach's Other Conjecture
+HANOI       Towers of Hanoi
+HDIVTRI     Highly Divisible Triangular Numbers
+HOLYKT      Holy Knight Chess Problem
+KNIGHT      The Knight's Tour
+LEAPYEAR    Leap Year Calculations
+LPALIN      Largest Palindrome Product
+LPRIME      Largest Prime Factor
+NQUEENS     The 'N' Queens Problem
+NTHROOT     Calculating the Nth Root 
+P10001      Calculating the 10,001st Prime Number
+PENNEYS     Penney's Game
+POKRHAND    Calculating which Poker hands win
+POKERDAT    Data for the problem set in POKRHAND
+PRIMES      Calculating prime numbers with the Sieve of Eratothenes
+PRIS100     100 Prisoners problem
+QUADPRI     Quadratc Primes calculation
+SuMSQ       Sum of the Squares Differences
+
+SIMPLE      Simple Programming Problems
+INTERMED    Intermeditate Programming Problems
+STRINGS     String Manipulation Exercises
 
 
-NQUEENS     The N*Queens Chess Board Problem

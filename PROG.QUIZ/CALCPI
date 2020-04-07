@@ -5,9 +5,11 @@ CALCULATING PI
 
 PROBLEM
 
-Create a program to continually calculate and output the next decimal digit of   {\displaystyle \pi }   (pi).
+Create a program to continually calculate and output the next decimal
+digit of Pi.
 
-The program should continue forever (until it is aborted by the user) calculating and outputting each decimal digit in succession.
+The program should continue forever (until it is aborted by the user)
+calculating and outputting each decimal digit in succession.
 
 The output should be a decimal sequence beginning   3.14159265 ...
 
