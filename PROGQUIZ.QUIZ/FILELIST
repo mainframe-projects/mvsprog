@@ -25,11 +25,12 @@ people can pull down the resource in an easy fashion.
 
                               PROGRAMMING QUIZ
 
-The PROG.QUIZ dataset is a set of PDS members containing various
+The PROGQUIZ.doc dataset is a set of PDS members containing various
 programming problems for the user to solve. Each file contains the
 following:
 
-1. A description of the problem 2. Suggested approach or algorithm
+1. A description of the problem 
+2. Suggested approach or algorithm
 3. Any References
 
 It is suggested that the user creates a PDS for him/herself named
